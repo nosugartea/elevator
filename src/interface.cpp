@@ -6,9 +6,9 @@ TInterface::TInterface(QWidget *parent)
     setWindowTitle("Лифт мечты");
     setFixedSize(600, 500);
 
-    canvas.setWindowTitle("Граф");
+    param.setWindowTitle("Граф");
 
-    connect(this, &TInterface::closed, &canvas, &TCanvas::close);
+    connect(this, &TInterface::closed, &param, &TParam::close);
 }
 
 void TInterface::closeEvent(QCloseEvent *event)
@@ -19,6 +19,6 @@ void TInterface::closeEvent(QCloseEvent *event)
 
 TInterface::~TInterface()
 {
-    canvas.close();
+    param.close();
 }
 

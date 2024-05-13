@@ -5,13 +5,13 @@
 
 class TElevator
 {
-    int currentFloor; // текущий этаж личфта
-    int maxPassengerCount; // грузоподъемность
-    std::vector<int> reachingPoints; // этажи, для пассажиров
+    int maxLiftCapacity; // грузоподъемность
+    int currentFloor; // текущий этаж лифта
+    std::vector<int> reachingPoints; // этажи цели, для пассажиров
     char state;
 
 public:
-    TElevator();
+    TElevator(int);
 
     void move(); // использует currentFloor, maxPassengerCount, state, reachingPoints
     void setState(char); // state = s;

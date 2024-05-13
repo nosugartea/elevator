@@ -2,13 +2,13 @@
 #define TINTERFACE_H
 
 #include <QWidget>
-#include "canvas.h"
+#include "param.h"
 
 class TInterface : public QWidget
 {
     Q_OBJECT
 
-    TCanvas canvas;
+    TParam param;
 
 signals:
     void closed();

@@ -1,3 +1,4 @@
 #include "elevator.h"
 
-TElevator::TElevator() {}
+TElevator::TElevator(int l) : maxLiftCapacity(l)
+{}

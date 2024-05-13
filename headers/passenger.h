@@ -3,11 +3,12 @@
 
 class TPassenger
 {
-    int destinationFloor;
-    int currentFloor;
-    char direction;
+    int maxFloors; // количество этажей в подъезде
+    int destinationFloor; // номер этажа нужный пассажиру
+    int currentFloor; // текущий номер этажа ??
+    char direction; // направление вверх/вниз куда нужно пассажиру
 public:
-    TPassenger();
+    TPassenger(int, int);
 };
 
 #endif // PASSENGER_H

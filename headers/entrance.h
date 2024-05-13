@@ -7,12 +7,15 @@
 
 class TEntrance
 {
+    int maxFloors;
+    int maxLiftCapacity;
+
     std::vector<TFloor> floorVec;
     TElevator elevator;
 
-    bool genFloor();
 public:
-    TEntrance();
+    TEntrance(int, int);
+    void setBusyFloor(int); // вызываем генерацию пассажиров на этаже
 };
 
 #endif // TENTRANCE_H

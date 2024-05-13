@@ -9,23 +9,30 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src\manager.cpp \
     src\elevator.cpp \
     src\entrance.cpp \
     src\floor.cpp \
     src\house.cpp \
     src\main.cpp \
-    src\canvas.cpp \
+    src\param.cpp \
     src\interface.cpp \
-    src\passenger.cpp
+    src\passenger.cpp \
+    src\manager.cpp \
+    src\state.cpp
 
 HEADERS += \
-    headers\canvas.h \
+    headers\param.h \
     headers\elevator.h \
     headers\entrance.h \
     headers\floor.h \
     headers\house.h \
     headers\interface.h \
-    headers\passenger.h
+    headers\passenger.h \
+    headers\manager.h \
+    headers\state.h
+
+INCLUDEPATH += headers src
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
