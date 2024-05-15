@@ -14,6 +14,7 @@ class THouse
 
     void genPassengers();
 public:
+    THouse();
     THouse(int, int, int);
 };
 

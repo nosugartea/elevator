@@ -2,6 +2,13 @@
 #include <cstdlib>
 #include <ctime>
 
+THouse::THouse() :
+    maxEntrances(2),
+    maxFloors(9),
+    maxLiftCapacity(6),
+    entranceVec(maxEntrances, TEntrance(maxFloors, maxLiftCapacity))
+{}
+
 THouse::THouse(int e,int f,int l) :
     maxEntrances(e),
     maxFloors(f),
