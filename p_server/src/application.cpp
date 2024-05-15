@@ -1,8 +1,7 @@
 #include "application.h"
 #include "common.h"
 
-TApplication::TApplication(int argc, char *argv[])
-    : QCoreApplication(argc,argv)
+TServer::TServer(QObject *parent) : QObject(parent)
 {
     TCommParams pars = { QHostAddress("127.0.0.1"), 10000,
                         QHostAddress("127.0.0.1"), 10001};

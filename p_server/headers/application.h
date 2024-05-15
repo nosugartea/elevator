@@ -7,7 +7,7 @@
 #include "communicator.h"
 #include "house.h"
 
-class TApplication : public QCoreApplication
+class TServer : public QObject
 {
     Q_OBJECT
 
@@ -25,7 +25,7 @@ class TApplication : public QCoreApplication
 
 public:
 
-    TApplication(int, char**);
+    TServer(QObject *parent = nullptr);
 
 signals:
 
