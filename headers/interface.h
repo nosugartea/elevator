@@ -3,18 +3,20 @@
 
 #include <QWidget>
 #include "param.h"
+#include "house.h"
 
 class TInterface : public QWidget
 {
     Q_OBJECT
 
     TParam param;
+    THouse *house;
 
 signals:
     void closed();
 
 public:
-    TInterface(QWidget *parent = nullptr);
+    TInterface(THouse *h, QWidget *parent = nullptr);
     ~TInterface();
 
 protected:

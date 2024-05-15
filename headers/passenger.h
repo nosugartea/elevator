@@ -1,5 +1,5 @@
-#ifndef PASSENGER_H
-#define PASSENGER_H
+#ifndef TPASSENGER_H
+#define TPASSENGER_H
 
 class TPassenger
 {
@@ -11,4 +11,4 @@ public:
     TPassenger(int, int);
 };
 
-#endif // PASSENGER_H
+#endif // TPASSENGER_H

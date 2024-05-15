@@ -1,16 +1,16 @@
-#include "canvas.h"
+#include "state.h"
 
-TCanvas::TCanvas(QWidget *parent)
+TState::TState(QWidget *parent)
     : QWidget(parent)
 {
     setFixedSize(400,400);
 }
 
-TCanvas::~TCanvas()
+TState::~TState()
 {
 }
 
-void TCanvas::closeEvent(QCloseEvent *event)
+void TState::closeEvent(QCloseEvent *event)
 {
     emit closed();
     QWidget::closeEvent(event);

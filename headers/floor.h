@@ -6,18 +6,15 @@
 
 class TFloor
 {
-    int maxLiftCapacity; // грузоподъемность
-    static int numFloor; // номер этажа
+    int maxFloors; // максимальное количество этажей
     int maxWait; // максимальное количество ожидающих пассажиров
-    bool isGen; // флаг для старта генерациии пассажиров
 
     std::vector<TPassenger> passengerVec;
 
 public:
     TFloor(int);
     void genPassengers(); // генерируем число новых пассажиров
+    static int numFloor; // номер этажа
 };
-
-int TFloor::numFloor = 1;
 
 #endif // TFLOOR_H

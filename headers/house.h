@@ -1,20 +1,33 @@
 #ifndef THOUSE_H
 #define THOUSE_H
 
-#include "entrance.h"
+#include <QObject>
+#include "floor.h"
+#include "elevator.h"
 #include <vector>
 
-class THouse
+class THouse :  public QObject
 {
+    Q_OBJECT
+
     int maxEntrances;
     int maxFloors;
     int maxLiftCapacity;
 
-    std::vector<TEntrance> entranceVec;
+    std::vector<std::vector<TFloor>> floorVecVec;
+    std::vector<TElevator> elevatorVec;
 
-    void genPassengers();
 public:
     THouse(int, int, int);
+
+    void moveElevator(int, int);
+
+public slots:
+    void genPassengers();
+
+signals:
+    // Сигнал для отправки информации о создании пассажира
+    void passengerGenerated(); // ??
 };
 
 #endif // THOUSE_H

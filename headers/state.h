@@ -1,16 +1,16 @@
-#ifndef VIEWER_H
-#define VIEWER_H
+#ifndef TSTATE_H
+#define TSTATE_H
 
 #include <QWidget>
 #include <QCloseEvent>
 
-class TCanvas : public QWidget
+class TState : public QWidget
 {
     Q_OBJECT
 
 public:
-    TCanvas(QWidget *parent = 0);
-    ~TCanvas();
+    TState(QWidget *parent = 0);
+    ~TState();
 
 signals:
     void closed();
@@ -19,4 +19,4 @@ protected:
     void closeEvent(QCloseEvent*);
 };
 
-#endif // VIEWER_H
+#endif // TSTATE_H

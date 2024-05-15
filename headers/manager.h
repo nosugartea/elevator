@@ -1,16 +1,16 @@
-#ifndef VIEWER_H
-#define VIEWER_H
+#ifndef TMANAGER_H
+#define TMANAGER_H
 
 #include <QWidget>
 #include <QCloseEvent>
 
-class TCanvas : public QWidget
+class TManager : public QWidget
 {
     Q_OBJECT
 
 public:
-    TCanvas(QWidget *parent = 0);
-    ~TCanvas();
+    TManager(QWidget *parent = 0);
+    ~TManager();
 
 signals:
     void closed();
@@ -19,4 +19,4 @@ protected:
     void closeEvent(QCloseEvent*);
 };
 
-#endif // VIEWER_H
+#endif // TMANAGER_H

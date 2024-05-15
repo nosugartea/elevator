@@ -1,16 +1,16 @@
-#include "canvas.h"
+#include "manager.h"
 
-TCanvas::TCanvas(QWidget *parent)
+TManager::TManager(QWidget *parent)
     : QWidget(parent)
 {
     setFixedSize(400,400);
 }
 
-TCanvas::~TCanvas()
+TManager::~TManager()
 {
 }
 
-void TCanvas::closeEvent(QCloseEvent *event)
+void TManager::closeEvent(QCloseEvent *event)
 {
     emit closed();
     QWidget::closeEvent(event);

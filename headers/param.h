@@ -1,5 +1,5 @@
-#ifndef VIEWER_H
-#define VIEWER_H
+#ifndef TPARAM_H
+#define TPARAM_H
 
 #include <QWidget>
 #include <QCloseEvent>
@@ -19,4 +19,4 @@ protected:
     void closeEvent(QCloseEvent*);
 };
 
-#endif // VIEWER_H
+#endif // TPARAM_H
