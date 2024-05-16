@@ -10,7 +10,6 @@ CONFIG += c++17
 
 SOURCES += \
     src\elevator.cpp \
-    src\entrance.cpp \
     src\floor.cpp \
     src\house.cpp \
     src\main.cpp \
@@ -23,7 +22,6 @@ SOURCES += \
 HEADERS += \
     headers\param.h \
     headers\elevator.h \
-    headers\entrance.h \
     headers\floor.h \
     headers\house.h \
     headers\interface.h \

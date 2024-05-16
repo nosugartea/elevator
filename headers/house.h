@@ -5,6 +5,7 @@
 #include "floor.h"
 #include "elevator.h"
 #include <vector>
+#include <QDebug>
 
 class THouse :  public QObject
 {
@@ -20,14 +21,21 @@ class THouse :  public QObject
 public:
     THouse(int, int, int);
 
-    void moveElevator(int, int);
+    void moveElevator(int);
+    std::vector<TElevator>& getElevatorVec();
 
 public slots:
     void genPassengers();
+    void onLiftMove(int floor) {
+        qDebug() << "THouse >> Floor is now: Curr Floor" << floor;
+        emit senderFloorChanged(floor);
+    }
+    void goOnFloor(int) { moveElevator(1);};
 
 signals:
     // Сигнал для отправки информации о создании пассажира
-    void passengerGenerated(); // ??
+    void passengerGenerated(TPassenger*); // ??
+    void senderFloorChanged(int floor);
 };
 
 #endif // THOUSE_H

@@ -9,6 +9,8 @@ class TPassenger
     char direction; // направление вверх/вниз куда нужно пассажиру
 public:
     TPassenger(int, int);
+    int getStartFloor() { return currentFloor; }
+    int getDestinationFloor() { return destinationFloor; }
 };
 
 #endif // TPASSENGER_H
