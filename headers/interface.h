@@ -4,9 +4,12 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QPushButton>
 #include <QPainter>
 
 #include "param.h"
+#include "state.h"
+#include "manager.h"
 #include "house.h"
 
 class TInterface : public QWidget
@@ -15,6 +18,10 @@ class TInterface : public QWidget
 
     TParam param;
     THouse *house;
+    QPushButton* startFloor;
+    TState* stateWidget;
+    TParam* paramWidget;
+    TManager* managerWidget;
 
 signals:
     void closed();
@@ -29,18 +36,16 @@ protected:
 
 public slots:
     // Слот для обработки создания пассажира
-    void onPassengerGenerated(TPassenger *passenger) {
-        qDebug() << "Passenger generated: Start Floor" << passenger->getStartFloor()
-                 << ", Destination Floor" << passenger->getDestinationFloor();
-        // Здесь можно добавить логику для отображения информации о пассажире на интерфейсе
-        delete passenger;
+    void onPassengerGenerated(int floor) {
+        qDebug() << "Passenger generated: Start Floor" << floor;
     }
 
-    void onLiftMoveT(int floor) {
+    void onfloorChanged(int floor) {
         qDebug() << "TInterface >> Floor is now: Curr Floor" << floor;
     }
 
-private:
-    QLabel *floorLabel;
+    void onStartLift() {
+        house->moveElevator(0);
+    }
 };
 #endif // TINTERFACE_H

@@ -10,12 +10,15 @@ class TFloor
     int maxFloors; // максимальное количество этажей
     int maxWait; // максимальное количество ожидающих пассажиров
 
-    std::vector<TPassenger> passengerVec;
+    std::vector<TPassenger*> passengerVec;
 
 public:
     TFloor();
     TFloor(int, int);
-    TPassenger* genPassengers(); // генерируем число новых пассажиров
+
+    ~TFloor();
+
+    int genPassengers(); // генерируем число новых пассажиров
 };
 
 #endif // TFLOOR_H

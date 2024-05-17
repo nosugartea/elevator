@@ -12,19 +12,24 @@ TFloor::TFloor(int n, int f) :
     floorNum(n),
     maxFloors(f),
     maxWait(6),
-    passengerVec(0, TPassenger(maxFloors, floorNum))
+    passengerVec(0, new TPassenger(maxFloors, floorNum))
 {
 }
 
-TPassenger* TFloor::genPassengers()
+int TFloor::genPassengers()
 {
-    TPassenger* p = nullptr;
     std::srand(std::time(nullptr));
-    int newPassenCount = 0 + std::rand() % 1;
+    int newPassenCount = 1;// не используется
     for (int i = 0; i < newPassenCount; ++i) {
-        TPassenger newPass(maxFloors, floorNum);
+        TPassenger* newPass = new TPassenger(maxFloors, floorNum);
         passengerVec.push_back(newPass);
-        p = &newPass;
     }
-    return p;
+    return newPassenCount;
+}
+
+TFloor::~TFloor()
+{
+    for (TPassenger* passenger : passengerVec) {
+        delete passenger;
+    }
 }

@@ -3,13 +3,22 @@
 
 #include <vector>
 #include <QObject>
+#include <QTimer>
 
-class TElevator : QObject
+class TElevator : public QObject
 {
+    Q_OBJECT
+
     int maxLiftCapacity; // грузоподъемность
     int currentFloor; // текущий этаж лифта
+    int targetFloor; // этаж куда едем
     std::vector<int> reachingPoints; // этажи цели, для пассажиров
-    char state; // 0 - стоим, 1 - едем вверх, -1 - едем вниз
+    int state; // 0 - стоим, 1 - едем вверх, -1 - едем вниз
+    QTimer *timer; // для времени перемещения между этажами
+    int millisecondsPerFloor; // Время, которое требуется на перемещение на один этаж
+
+private slots:
+    void moveElevator();
 
 public:
     TElevator();
@@ -22,8 +31,7 @@ public:
     void moveToFloor();
 
 signals:
-    // Сигнал для отправки информации об изменении этажа
-    void floorChanged(int floor);
+    void floorChanged(int floor); // Сигнал для отправки информации об изменении этажа
 };
 
 #endif // TELEVATOR_H

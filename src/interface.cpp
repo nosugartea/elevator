@@ -8,16 +8,29 @@ TInterface::TInterface(THouse *h, QWidget *parent)
 
     param.setWindowTitle("Окно");
 
-    connect(this, &TInterface::closed, &param, &TParam::close);
+    stateWidget = new TState(this);
+    paramWidget = new TParam(this);
+    managerWidget = new TManager(this);
 
-    // Создаем основные элементы интерфейса
-    QVBoxLayout *layout = new QVBoxLayout();
-    floorLabel = new QLabel("Current Floor: 1", this);
-    layout->addWidget(floorLabel);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(stateWidget);
+    mainLayout->addWidget(paramWidget);
+    mainLayout->addWidget(managerWidget);
+    setLayout(mainLayout);
+
+    //connect(this, &TInterface::closed, &param, &TParam::close);
+
+    startFloor = new QPushButton("Start Floor", this);
+    startFloor->setGeometry(140,20,100,25);
 
     // Подключаем сигналы и слоты
     connect(house, &THouse::passengerGenerated, this, &TInterface::onPassengerGenerated);
-    connect(house, &THouse::onLiftMove, this, &TInterface::onLiftMoveT);
+    const std::vector<TElevator*>& elevators = house->getElevatorVec();
+    for (TElevator* elevator : elevators) {
+        connect(elevator, &TElevator::floorChanged, this, &TInterface::onfloorChanged);
+    }
+    //connect(house, &THouse::passengerGenerated, this, &TInterface::onPassengerGenerated);
+    connect(startFloor, &QPushButton::clicked, this, &TInterface::onStartLift);
 }
 
 void TInterface::closeEvent(QCloseEvent *event)

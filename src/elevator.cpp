@@ -1,6 +1,7 @@
 #include "elevator.h"
 
 #include <QTimer>
+#include <QEventLoop>
 #include <algorithm>
 
 TElevator::TElevator()
@@ -8,10 +9,17 @@ TElevator::TElevator()
 
 TElevator::TElevator(int l) :
     maxLiftCapacity(l),
-    currentFloor(1), // текущий этаж лифта
+    currentFloor(0), // текущий этаж лифта
+    targetFloor(0),
     reachingPoints(0), // этажи цели, для пассажиров
     state(0)
-{}
+{
+    setReachPoint(3);
+    setReachPoint(2);
+    setReachPoint(5);
+
+    millisecondsPerFloor = 1000; // 1 секунда
+}
 
 TElevator& TElevator::operator=(const TElevator& other)
 {
@@ -26,9 +34,25 @@ TElevator& TElevator::operator=(const TElevator& other)
     return *this;
 }
 
-void TElevator::move()
+void TElevator::moveElevator()
 {
+    // Если лифт уже на нужном этаже, не нужно ничего делать
+    if (currentFloor == targetFloor) {
+        return;
+    }
 
+    // Перемещаем лифт на следующий этаж
+    if (state == 1) {
+        currentFloor++;
+    } else if (state == -1) {
+        currentFloor--;
+    }
+
+    QEventLoop loop;
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    timer.start(millisecondsPerFloor);
+    emit floorChanged(currentFloor);
 }
 
 void TElevator::setState(char s)
@@ -44,36 +68,37 @@ void TElevator::setReachPoint(int destinationFloors)
 
 void TElevator::moveToFloor()
 {
-    int floor = 3; //reachingPoints[0];
-    int state = (currentFloor - floor > 0 ? 1 : -1); // вычисляем напрвление движения
-    int floorsToMove = qAbs(currentFloor - floor); // Вычисляем количество этажей для перемещения
-
-    // Если лифт уже на нужном этаже, не нужно ничего делать
-    if (floorsToMove == 0) {
-        state = 0;
-        return;
+    // поиск ближайшего этажа в соответствии с напрвлением лифта
+    int closeFloorIndx = 0;
+    targetFloor = reachingPoints[0];
+    for (int i = 1; i < reachingPoints.size(); ++i) {
+        int minDistance = abs(currentFloor - reachingPoints[closeFloorIndx]);
+        int distance = abs(currentFloor - reachingPoints[i]);
+        if (distance < minDistance) {
+            if ((currentFloor - reachingPoints[i] < 0 && state == 1) ||
+                (currentFloor - reachingPoints[i] > 0 && state == -1))
+            {
+                targetFloor = reachingPoints[i];
+                closeFloorIndx = i;
+            }
+            if (state == 0) {
+                targetFloor = reachingPoints[i];
+            }
+        }
     }
 
-    // Время, которое требуется на перемещение на один этаж
-    int millisecondsPerFloor = 1000; // 1 секунда
+    // если лифт стоял, то устанавливаем ему напрвление движения
+    if (state == 0 && !reachingPoints.empty()) {
+        state = (targetFloor - currentFloor > 0) ? 1 : -1; // вычисляем напрвление движения
+    }
 
-    // Создаем таймер для перемещения лифта
-    QTimer *timer = new QTimer();
-    connect(timer, &QTimer::timeout, this, [=]() mutable {
-        // Перемещаем лифт на следующий этаж
-        if (state == 1) {
-            currentFloor++;
-        } else {
-            currentFloor--;
-        }
+    moveElevator();
 
-        emit floorChanged(currentFloor);
-        timer->start(millisecondsPerFloor);
+    if (currentFloor == targetFloor) {
+        reachingPoints.erase(std::remove(reachingPoints.begin(), reachingPoints.end(), targetFloor), reachingPoints.end());
+    }
 
-        // Если лифт достиг нужного этажа, останавливаем таймер и отправляем сигнал
-        if (currentFloor == floor) {
-            state = 0;
-            timer->stop();
-        }
-    });
+    if (reachingPoints.empty()) {
+        state = 0;
+    }
 }
