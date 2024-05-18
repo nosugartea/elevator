@@ -10,6 +10,7 @@ class TElevator : public QObject
     Q_OBJECT
 
     int maxLiftCapacity; // грузоподъемность
+    int passengersIn;
     int currentFloor; // текущий этаж лифта
     int targetFloor; // этаж куда едем
     std::vector<int> reachingPoints; // этажи цели, для пассажиров
@@ -25,10 +26,15 @@ public:
     TElevator(int);
     TElevator& operator=(const TElevator&);
 
-    void move(); // использует currentFloor, maxPassengerCount, state, reachingPoints
+    // void move(); // использует currentFloor, maxPassengerCount, state, reachingPoints
     void setState(char); // state = s;
+    int getState() { return state; }
     void setReachPoint(int); // reachingPoints.push_back(p);
-    void moveToFloor();
+    bool moveToFloor();
+    int getCurrentFloor() { return currentFloor; }
+    int getPassengerIn() { return passengersIn; }
+    void setPassengerIn(int p) { passengersIn += p; }
+    int getCapacity() { return passengersIn; }
 
 signals:
     void floorChanged(int floor); // Сигнал для отправки информации об изменении этажа

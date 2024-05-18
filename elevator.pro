@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/liftButton.cpp \
     src\elevator.cpp \
     src\floor.cpp \
     src\house.cpp \
@@ -20,6 +21,8 @@ SOURCES += \
     src\state.cpp
 
 HEADERS += \
+    headers/MyStyleSheets.h \
+    headers/liftButton.h \
     headers\param.h \
     headers\elevator.h \
     headers\floor.h \

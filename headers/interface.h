@@ -16,12 +16,17 @@ class TInterface : public QWidget
 {
     Q_OBJECT
 
-    TParam param;
-    THouse *house;
-    QPushButton* startFloor;
     TState* stateWidget;
     TParam* paramWidget;
     TManager* managerWidget;
+
+    THouse *house;
+    QPushButton* startFloor;
+
+    int stateSizeX, stateSizeY;
+
+    int entrances;
+    int floors;
 
 signals:
     void closed();
@@ -32,20 +37,14 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 public slots:
     // Слот для обработки создания пассажира
-    void onPassengerGenerated(int floor) {
-        qDebug() << "Passenger generated: Start Floor" << floor;
-    }
-
-    void onfloorChanged(int floor) {
-        qDebug() << "TInterface >> Floor is now: Curr Floor" << floor;
-    }
-
-    void onStartLift() {
-        house->moveElevator(0);
-    }
+    void onPassengerGenerated(int, int,int);
+    void onfloorChanged(int);
+    void onStartLift();
+    void onSetParam();
+    void onPassengerIn(int, int, int);
 };
 #endif // TINTERFACE_H

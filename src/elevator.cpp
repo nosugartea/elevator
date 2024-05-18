@@ -9,15 +9,12 @@ TElevator::TElevator()
 
 TElevator::TElevator(int l) :
     maxLiftCapacity(l),
+    passengersIn(0),
     currentFloor(0), // текущий этаж лифта
     targetFloor(0),
     reachingPoints(0), // этажи цели, для пассажиров
     state(0)
 {
-    setReachPoint(3);
-    setReachPoint(2);
-    setReachPoint(5);
-
     millisecondsPerFloor = 1000; // 1 секунда
 }
 
@@ -47,12 +44,11 @@ void TElevator::moveElevator()
     } else if (state == -1) {
         currentFloor--;
     }
+    emit floorChanged(currentFloor);
 
     QEventLoop loop;
-    QTimer timer;
-    QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-    timer.start(millisecondsPerFloor);
-    emit floorChanged(currentFloor);
+    QTimer::singleShot(1000, &loop, SLOT(quit()));
+    loop.exec();
 }
 
 void TElevator::setState(char s)
@@ -66,7 +62,7 @@ void TElevator::setReachPoint(int destinationFloors)
     std::sort(reachingPoints.begin(), reachingPoints.end()); // сортировка по возрастанию
 }
 
-void TElevator::moveToFloor()
+bool TElevator::moveToFloor()
 {
     // поиск ближайшего этажа в соответствии с напрвлением лифта
     int closeFloorIndx = 0;
@@ -92,13 +88,25 @@ void TElevator::moveToFloor()
         state = (targetFloor - currentFloor > 0) ? 1 : -1; // вычисляем напрвление движения
     }
 
+    if (currentFloor - targetFloor < 0 && state == -1) {
+        state = 1;
+    }
+
+    if (currentFloor - targetFloor > 0 && state == 1) {
+        state = -1;
+    }
+
     moveElevator();
 
+    bool onFloor = false;
     if (currentFloor == targetFloor) {
         reachingPoints.erase(std::remove(reachingPoints.begin(), reachingPoints.end(), targetFloor), reachingPoints.end());
+        onFloor = true;
     }
 
     if (reachingPoints.empty()) {
         state = 0;
     }
+
+    return onFloor;
 }
