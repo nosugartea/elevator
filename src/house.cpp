@@ -42,6 +42,7 @@ void THouse::moveElevator(std::vector<int> destinFloors, int elevatorIndex) {
 
         do {
         } while (!elevatorVec[elevatorIndex]->moveToFloor());
+        emit openDoors(elevatorIndex);
 
         int currFloor = elevatorVec[elevatorIndex]->getCurrentFloor();
         std::vector<TPassenger*> passengersWait = floorVecVec[elevatorIndex][currFloor]->getPassengers();
@@ -70,7 +71,7 @@ void THouse::genPassengers()
     int destinationFloor = floorVecVec[busyEntrance][busyFloor]->genPassengers();
     elevatorVec[busyEntrance]->setReachPoint(busyFloor);
 
-    emit passengerGenerated(busyEntrance, destinationFloor, busyFloor);
+    //emit passengerGenerated(busyEntrance, destinationFloor, busyFloor);
 }
 
 void THouse::resetParam(int e, int f, int c)

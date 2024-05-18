@@ -21,7 +21,7 @@ SOURCES += \
     src\state.cpp
 
 HEADERS += \
-    headers/MyStyleSheets.h \
+    headers/myStyleSheets.h \
     headers/liftButton.h \
     headers\param.h \
     headers\elevator.h \

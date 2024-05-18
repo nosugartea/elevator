@@ -41,10 +41,11 @@ protected:
 
 public slots:
     // Слот для обработки создания пассажира
-    void onPassengerGenerated(int, int,int);
+    void onPassengerIsMade();
     void onfloorChanged(int);
     void onStartLift();
     void onSetParam();
     void onPassengerIn(int, int, int);
+    void onOpenDoors(int);
 };
 #endif // TINTERFACE_H

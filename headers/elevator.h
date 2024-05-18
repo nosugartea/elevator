@@ -15,7 +15,7 @@ class TElevator : public QObject
     int targetFloor; // этаж куда едем
     std::vector<int> reachingPoints; // этажи цели, для пассажиров
     int state; // 0 - стоим, 1 - едем вверх, -1 - едем вниз
-    QTimer *timer; // для времени перемещения между этажами
+    bool doorIsOpen;
     int millisecondsPerFloor; // Время, которое требуется на перемещение на один этаж
 
 private slots:
@@ -35,6 +35,8 @@ public:
     int getPassengerIn() { return passengersIn; }
     void setPassengerIn(int p) { passengersIn += p; }
     int getCapacity() { return passengersIn; }
+    void setDoorIsOpen(bool ok) { doorIsOpen = ok; }
+    bool getDoorIsOpen() { return doorIsOpen; }
 
 signals:
     void floorChanged(int floor); // Сигнал для отправки информации об изменении этажа

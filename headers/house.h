@@ -28,6 +28,7 @@ public:
     void resetParam(int, int, int);
     int getElevatorCapacity(int entrance) { return elevatorVec[entrance]->getCapacity(); }
     int getElevatorState(int entrance) { return elevatorVec[entrance]->getState(); }
+    bool getElevatorDoors(int entrance) {return elevatorVec[entrance]->getDoorIsOpen(); }
 
 public slots:
     void genPassengers();
@@ -37,10 +38,9 @@ public slots:
     // void goOnFloor(int) { moveElevator(1);};
 
 signals:
-    // Сигнал для отправки информации о создании пассажира
-    void passengerGenerated(int, int, int); // ??
     void liftMove(int floor);
     void passengerIn(int direction, int entrance, int floor);
+    void openDoors(int);
 };
 
 #endif // THOUSE_H

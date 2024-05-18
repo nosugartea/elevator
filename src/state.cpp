@@ -30,9 +30,9 @@ TState::TState(int e, int f, QWidget *parent)
         elevatorsState.push_back(0);
     }
 
-    passengerInfo = new QTextEdit("", this);
-    passengerInfo->setFixedSize(250, 210);
-    passengerInfo->move(150 * entrances + 165, 200);
+    for (int i = 0; i < entrances; ++i) {
+        elevatorsDoors.push_back(true);
+    }
 }
 
 TState::~TState()
@@ -77,7 +77,7 @@ void TState::paintEvent(QPaintEvent*)
 
             if (floors - elevatorsPosition[col] == i + 1) {
                 QLinearGradient gradient(x1, y1, x1 + floorWidth, y1 + floorHeight);
-                if (elevatorsState[col] != 0)
+                if (elevatorsDoors[col] == false)
                 {
                     gradient.setColorAt(0, QColor("#58CDAE"));
                     gradient.setColorAt(1, QColor("#3CB37B"));
@@ -117,6 +117,7 @@ void TState::setNewParam(int e, int f)
     passengerDOWN.clear();
     elevatorsPassengersIn.clear();
     elevatorsState.clear();
+    elevatorsDoors.clear();
 
     for (int i = 0; i < entrances; ++i) {
         elevatorsPosition.push_back(0);
@@ -142,32 +143,32 @@ void TState::setNewParam(int e, int f)
         elevatorsState.push_back(0);
     }
 
+    for (int i = 0; i < entrances; ++i) {
+        elevatorsDoors.push_back(0);
+    }
 }
 
-void TState::moveElevator(int entrance, int floor, int passengersIn, int state)
+void TState::moveElevator(int entrance, int floor, int passengersIn, int state, bool doors)
 {
     elevatorsState[entrance] = state;
+    elevatorsDoors[entrance] = doors;
     elevatorsPosition[entrance] = floor;
     elevatorsPassengersIn[entrance] = passengersIn;
     update();
 }
 
-void TState::showPassenger(int entrance, int dest, int appear)
+void TState::showPassenger(int entrance, int dest, int appear, int count)
 {
     QChar direct;
     if (appear < dest)
     {
-        ++passengerUP[entrance][appear];
+        passengerUP[entrance][appear] += count;
         direct = 'U';
     } else if (appear > dest) {
-        ++passengerDOWN[entrance][appear];
+        passengerDOWN[entrance][appear] += count;
         direct = 'D';
     }
     update();
-    QString currentText = passengerInfo->toPlainText();
-    QString newText = "Подъезд " + QString::number(entrance + 1) + ": Пассажиру " + QString::number(appear + 1) + direct + " нужен этаж " + QString::number(dest + 1);
-    currentText.append(newText + "\n");
-    passengerInfo->setPlainText(currentText);
 }
 
 void TState::deletePassenger(int direction, int entrance, int floor)
@@ -178,4 +179,9 @@ void TState::deletePassenger(int direction, int entrance, int floor)
         --passengerDOWN[entrance][floor];
     }
     update();
+}
+
+void TState::openDoor(int entrance)
+{
+    elevatorsDoors[entrance] = true;
 }

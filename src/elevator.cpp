@@ -13,7 +13,8 @@ TElevator::TElevator(int l) :
     currentFloor(0), // текущий этаж лифта
     targetFloor(0),
     reachingPoints(0), // этажи цели, для пассажиров
-    state(0)
+    state(0),
+    doorIsOpen(true)
 {
     millisecondsPerFloor = 1000; // 1 секунда
 }
@@ -44,6 +45,7 @@ void TElevator::moveElevator()
     } else if (state == -1) {
         currentFloor--;
     }
+    doorIsOpen = false;
     emit floorChanged(currentFloor);
 
     QEventLoop loop;

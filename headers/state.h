@@ -2,7 +2,6 @@
 #define TSTATE_H
 
 #include <QWidget>
-#include <QTextEdit>
 #include <QCloseEvent>
 #include <vector>
 
@@ -12,8 +11,8 @@ class TState : public QWidget
 
     int entrances;
     int floors;
-    QTextEdit* passengerInfo;
     std::vector<int> elevatorsState;
+    std::vector<bool> elevatorsDoors;
     std::vector<int> elevatorsPosition;
     std::vector<int> elevatorsPassengersIn;
     std::vector<std::vector<int>> passengerUP;
@@ -24,9 +23,10 @@ public:
     ~TState();
 
     void setNewParam(int, int);
-    void moveElevator(int, int, int, int);
-    void showPassenger(int, int, int);
+    void moveElevator(int, int, int, int, bool);
+    void showPassenger(int, int, int, int);
     void deletePassenger(int, int, int);
+    void openDoor(int);
 
 signals:
     void closed();
