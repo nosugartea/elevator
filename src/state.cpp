@@ -162,10 +162,10 @@ void TState::showPassenger(int entrance, int dest, int appear, int count)
     QChar direct;
     if (appear < dest)
     {
-        passengerUP[entrance][appear] += count;
+        passengerUP[entrance][appear] = count;
         direct = 'U';
     } else if (appear > dest) {
-        passengerDOWN[entrance][appear] += count;
+        passengerDOWN[entrance][appear] = count;
         direct = 'D';
     }
     update();

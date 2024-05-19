@@ -83,6 +83,7 @@ void TManager::showButtons()
             button->move(startX + j * (buttonSize + buttonSpacing), startY + i * (buttonSize + buttonSpacing));
             connect(button, &TLiftButton::buttonPressed, this, &TManager::onStartButtonPressed);
             buttons.push_back(button);
+            button->show();
         }
     }
 }
@@ -211,11 +212,10 @@ void TManager::onEntranceBoxChanged(int index)
 
 void TManager::onDirectionBoxChanged(int index)
 {
-    int dir = comboBox->itemText(index).toInt();
-    if (dir == 0) {
+    if (index == 0) {
         passengerDirection = 1;
     }
-    if (dir == 1) {
+    if (index == 1) {
         passengerDirection = -1;
     }
 }

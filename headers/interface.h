@@ -21,8 +21,6 @@ class TInterface : public QWidget
     TManager* managerWidget;
 
     THouse *house;
-    QPushButton* startFloor;
-
     int stateSizeX, stateSizeY;
 
     int entrances;
@@ -39,7 +37,6 @@ public slots:
     void onPassengerIsMade(int, int, int, int, int);
     void onfloorChanged(int);
     void onStartLift();
-    void onCallLift();
     void onSetParam();
     void onPassengerIn(int, int, int);
     void onPassengerOut(int);

@@ -9,8 +9,6 @@ class TFloor
 {
     int floorNum; // номер этажа в подъезде
     int maxFloors; // максимальное количество этажей
-    int maxWait; // максимальное количество ожидающих пассажиров
-
     std::vector<TPassenger*> passengerVec;
     int passengersUp;
     int passengersDown;
@@ -35,7 +33,9 @@ public:
             passengerVec.erase(it);
         }
     }
-    void setPassengers(int df, int count) {
+
+    void setPassengers(int df, int count)
+    {
         for (int i = 0; i < count; ++i) {
             TPassenger* pass = new TPassenger(df);
             passengerVec.push_back(pass);

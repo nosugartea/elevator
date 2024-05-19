@@ -24,7 +24,6 @@ TInterface::TInterface(THouse *h, QWidget *parent)
 
 
     connect(managerWidget->getStartButton(), &QPushButton::clicked, this, &TInterface::onStartLift);
-    connect(managerWidget->getCallButton(), &QPushButton::clicked, this, &TInterface::onCallLift);
     connect(paramWidget->getSetParamButton(), &QPushButton::clicked, this, &TInterface::onSetParam);
     connect(managerWidget, &TManager::passengerIsMade, this, &TInterface::onPassengerIsMade);
     connect(house, &THouse::passengerIn, this, &TInterface::onPassengerIn);
@@ -48,12 +47,9 @@ void TInterface::resizeEvent(QResizeEvent *event)
 
 void TInterface::onPassengerIsMade(int entrance, int currentFloor, int destination, int count, int direction)
 {
-    if (currentFloor > destination && direction == 1) {
-        QMessageBox::warning(this, "Invalid input", "DВведено неправильное направление или этаж назначения.");
-        return;
-    }
-    if (currentFloor < destination && direction == -1) {
-        QMessageBox::warning(this, "Invalid input", "UВведено неправильное направление или этаж назначения.");
+    if ((currentFloor > destination && direction == 1) ||
+        (currentFloor < destination && direction == -1)) {
+        QMessageBox::warning(this, "Invalid input", "Введено неправильное направление или этаж назначения.");
         return;
     }
     if (count < 0) {
@@ -68,6 +64,10 @@ void TInterface::onPassengerIsMade(int entrance, int currentFloor, int destinati
     stateWidget->showPassenger(entrance, destination, currentFloor, count);
     house->setPassenger(entrance, currentFloor, destination, count);
     house->setDirection(entrance, direction);
+
+    int activeEntrance = managerWidget->getPassengerEntrance();
+    std::vector<int> goFloors { managerWidget->getPassengerCurFloor() + 1};
+    house->moveElevator(goFloors, activeEntrance);
 }
 
 void TInterface::onfloorChanged(int floor) {
@@ -85,13 +85,6 @@ void TInterface::onStartLift()
     if (goFloors.empty()) return;
     if(house->emptyElevator(activeEntrance)) return;
     managerWidget->resetPressedNumbers();
-    house->moveElevator(goFloors, activeEntrance);
-}
-
-void TInterface::onCallLift()
-{
-    int activeEntrance = managerWidget->getPassengerEntrance();
-    std::vector<int> goFloors { managerWidget->getPassengerCurFloor() + 1};
     house->moveElevator(goFloors, activeEntrance);
 }
 

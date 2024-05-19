@@ -29,7 +29,8 @@ int THouse::getFloorsCount()
     return maxFloors;
 }
 
-void THouse::moveElevator(std::vector<int> destinFloors, int elevatorIndex) {
+void THouse::moveElevator(std::vector<int> destinFloors, int elevatorIndex)
+{
     if (elevatorIndex >= 0 && elevatorIndex < elevatorVec.size()) {
         for (int i = 0; i < destinFloors.size(); ++i) {
             elevatorVec[elevatorIndex]->setReachPoint(destinFloors[i] - 1);
