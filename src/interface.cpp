@@ -37,12 +37,6 @@ TInterface::TInterface(THouse *h, QWidget *parent)
     }
 }
 
-void TInterface::closeEvent(QCloseEvent *event)
-{
-    emit closed();
-    QWidget::closeEvent(event);
-}
-
 void TInterface::resizeEvent(QResizeEvent *event)
 {
     stateWidget->move(5, 5);
@@ -52,10 +46,27 @@ void TInterface::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
-void TInterface::onPassengerIsMade(int entrance, int destination, int floor, int count, int direction)
+void TInterface::onPassengerIsMade(int entrance, int currentFloor, int destination, int count, int direction)
 {
-    stateWidget->showPassenger(entrance, destination, floor, count);
-    house->setPassenger(entrance, floor, destination, count);
+    if (currentFloor > destination && direction == 1) {
+        QMessageBox::warning(this, "Invalid input", "Введено неправильное направление или этаж назначения.");
+        return;
+    }
+    if (currentFloor < destination && direction == -1) {
+        QMessageBox::warning(this, "Invalid input", "Введено неправильное направление или этаж назначения.");
+        return;
+    }
+    if (count < 0) {
+        QMessageBox::warning(this, "Invalid input", "Введено отрицательное количество пассажиров.");
+        return;
+    }
+    if (count == 0) {
+        QMessageBox::warning(this, "Warn", "Не задано количество пассажиров.");
+        return;
+    }
+
+    stateWidget->showPassenger(entrance, destination, currentFloor, count);
+    house->setPassenger(entrance, currentFloor, destination, count);
     house->setDirection(entrance, direction);
 }
 

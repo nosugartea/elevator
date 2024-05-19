@@ -28,15 +28,11 @@ class TInterface : public QWidget
     int entrances;
     int floors;
 
-signals:
-    void closed();
-
 public:
     TInterface(THouse *h, QWidget *parent = nullptr);
     ~TInterface();
 
 protected:
-    void closeEvent(QCloseEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
 public slots:
