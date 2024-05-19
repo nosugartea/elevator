@@ -23,10 +23,12 @@ TInterface::TInterface(THouse *h, QWidget *parent)
     managerWidget->setFixedSize(430, stateSizeY);
 
     connect(managerWidget->getStartButton(), &QPushButton::clicked, this, &TInterface::onStartLift);
+    connect(managerWidget->getCallButton(), &QPushButton::clicked, this, &TInterface::onCallLift);
     connect(paramWidget->getSetParamButton(), &QPushButton::clicked, this, &TInterface::onSetParam);
     connect(managerWidget, &TManager::passengerIsMade, this, &TInterface::onPassengerIsMade);
     connect(house, &THouse::passengerIn, this, &TInterface::onPassengerIn);
-     connect(house, &THouse::openDoors, this, &TInterface::onOpenDoors);
+    connect(house, &THouse::passengerOut, this, &TInterface::onPassengerOut);
+    connect(house, &THouse::openDoors, this, &TInterface::onOpenDoors);
 
     const std::vector<TElevator*>& elevators = house->getElevatorVec();
     for (TElevator* elevator : elevators) {
@@ -51,11 +53,14 @@ void TInterface::resizeEvent(QResizeEvent *event)
 
 void TInterface::onPassengerIsMade()
 {
-    int entrance = managerWidget->getPassengerEntrance() - 1;
-    int destination =  managerWidget->getPassengerDestFloor() - 1;
-    int floor = managerWidget->getPassengerCurFloor() - 1;
+    int entrance = managerWidget->getPassengerEntrance();
+    int destination =  managerWidget->getPassengerDestFloor();
+    int floor = managerWidget->getPassengerCurFloor();
     int count = managerWidget->getPassengerCount();
+    int direction = managerWidget->getDirection();
     stateWidget->showPassenger(entrance, destination, floor, count);
+    house->setPassenger(entrance, floor, destination, count);
+    house->setDirection(entrance, direction);
 }
 
 void TInterface::onfloorChanged(int floor) {
@@ -66,11 +71,20 @@ void TInterface::onfloorChanged(int floor) {
     stateWidget->moveElevator(activeEntrance, floor, capacity, state, doors);
 }
 
-void TInterface::onStartLift() {
+void TInterface::onStartLift()
+{
+    int activeEntrance = managerWidget->getActiveEntrance();
     std::vector<int> goFloors = managerWidget->getPressedNumbers();
     if (goFloors.empty()) return;
+    if(house->emptyElevator(activeEntrance)) return;
     managerWidget->resetPressedNumbers();
-    int activeEntrance = managerWidget->getActiveEntrance();
+    house->moveElevator(goFloors, activeEntrance);
+}
+
+void TInterface::onCallLift()
+{
+    int activeEntrance = managerWidget->getPassengerEntrance();
+    std::vector<int> goFloors { managerWidget->getPassengerCurFloor() + 1};
     house->moveElevator(goFloors, activeEntrance);
 }
 
@@ -107,7 +121,12 @@ void TInterface::onSetParam()
 
 void TInterface::onPassengerIn(int direction, int entrance, int floor)
 {
-    stateWidget->deletePassenger(direction, entrance, floor);
+    stateWidget->clearFloor(direction, entrance, floor);
+}
+
+void TInterface::onPassengerOut(int entrance)
+{
+    stateWidget->clearElevator(entrance);
 }
 
 void TInterface::onOpenDoors(int entrance)

@@ -6,6 +6,11 @@
 TManager::TManager(int e, int f, QWidget *parent)
     : QWidget(parent), entrances(e), floors(f), activeEntrance(0)
 {
+    entrance = 0;
+    currFloor = 1;
+    destFloor = 1;
+    direction = 1;
+
     comboBox = new QComboBox(this);
     for (int i = 0; i < entrances; ++i) {
         comboBox->addItem("Подъезд " + QString::number(i+1));
@@ -55,8 +60,6 @@ void TManager::showButtons()
             connect(button, &TLiftButton::buttonPressed, this, &TManager::handleButtonPressed);
             buttons.push_back(button);
         }
-
-
     }
 }
 
@@ -115,6 +118,7 @@ void TManager::showMenu()
     connect(entranceBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onEntranceBoxChanged);
     connect(callListBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onCallListBoxChanged);
     connect(floorDestinBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onFloorDestinBoxChanged);
+    connect(directionBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onDirectionBoxChanged);
 }
 
 TManager::~TManager()
@@ -154,6 +158,11 @@ int TManager::getPassengerDestFloor()
     return destFloor;
 }
 
+int TManager::getDirection()
+{
+    return direction;
+}
+
 int TManager::getPassengerCount()
 {
     return countPassengersEdt->text().toInt();
@@ -161,15 +170,20 @@ int TManager::getPassengerCount()
 
 void TManager::onCallListBoxChanged(int index)
 {
-    currFloor = callListBox->itemText(index).toInt();
+    currFloor = index;
 }
 
 void TManager::onFloorDestinBoxChanged(int index)
 {
-    destFloor = floorDestinBox->itemText(index).toInt();
+    destFloor = index;
 }
 
 void TManager::onEntranceBoxChanged(int index)
 {
-    entrance = entranceBox->itemText(index).toInt();
+    entrance = index;
+}
+
+void TManager::onDirectionBoxChanged(int index)
+{
+    direction = index - 1;
 }

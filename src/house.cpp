@@ -1,6 +1,4 @@
 #include "house.h"
-#include <cstdlib>
-#include <ctime>
 #include <QTimer>
 
 THouse::THouse(int e,int f,int c) :
@@ -19,16 +17,13 @@ THouse::THouse(int e,int f,int c) :
     for (int i = 0; i < maxEntrances; ++i) {
         elevatorVec[i] = new TElevator(maxLiftCapacity);
     }
-
-    QTimer *timer = new QTimer();
-    connect(timer, &QTimer::timeout, this, &THouse::genPassengers);
-    timer->start(5000); // Интервал в миллисекундах
 }
 
 int THouse::getEntrancesCount()
 {
     return maxEntrances;
 }
+
 int THouse::getFloorsCount()
 {
     return maxFloors;
@@ -41,19 +36,35 @@ void THouse::moveElevator(std::vector<int> destinFloors, int elevatorIndex) {
         }
 
         do {
+            int currFloor = elevatorVec[elevatorIndex]->getCurrentFloor();
+            std::vector<TPassenger*> passengersWait = floorVecVec[elevatorIndex][currFloor]->getPassengers();
+            if (!passengersWait.empty() && elevatorVec[elevatorIndex]->getPassengerIn() < maxLiftCapacity &&
+                ((floorVecVec[elevatorIndex][currFloor]->getPassengersUp() && elevatorVec[elevatorIndex]->getState() == 1) ||
+                 (floorVecVec[elevatorIndex][currFloor]->getPassengersDown() && elevatorVec[elevatorIndex]->getState() == -1)))
+            {
+                break;
+            }
         } while (!elevatorVec[elevatorIndex]->moveToFloor());
         emit openDoors(elevatorIndex);
+
+        while (elevatorVec[elevatorIndex]->popPassenger()) {
+            emit passengerOut(elevatorIndex);
+        }
 
         int currFloor = elevatorVec[elevatorIndex]->getCurrentFloor();
         std::vector<TPassenger*> passengersWait = floorVecVec[elevatorIndex][currFloor]->getPassengers();
         for (int i = 0; i < passengersWait.size(); ++i) {
             int goFloor = passengersWait[i]->getDestinationFloor();
 
-            if ((currFloor < goFloor &&  elevatorVec[elevatorIndex]->getState() == 1) ||
-                (currFloor < goFloor &&  elevatorVec[elevatorIndex]->getState() == -1)) {
-                elevatorVec[elevatorIndex]->setPassengerIn(1);
+            if (elevatorVec[elevatorIndex]->getPassengerIn() < maxLiftCapacity &&
+                ((currFloor < goFloor &&  elevatorVec[elevatorIndex]->getState() == 1) ||
+                 (currFloor > goFloor &&  elevatorVec[elevatorIndex]->getState() == -1) ||
+                  elevatorVec[elevatorIndex]->getState() == 0)) {
+
+                elevatorVec[elevatorIndex]->setPassengerIn(goFloor);
                 floorVecVec[elevatorIndex][currFloor]->deletePassenger(goFloor);
-                emit passengerIn(elevatorVec[elevatorIndex]->getState(), elevatorIndex, currFloor);
+
+                emit passengerIn(elevatorVec[elevatorIndex]->getLastDirect(), elevatorIndex, currFloor);
             }
         }
     }
@@ -61,17 +72,6 @@ void THouse::moveElevator(std::vector<int> destinFloors, int elevatorIndex) {
 
 std::vector<TElevator*>& THouse::getElevatorVec() {
     return elevatorVec;
-}
-
-void THouse::genPassengers()
-{
-    std::srand(std::time(nullptr));
-    int busyEntrance = 0 + std::rand() % maxEntrances;
-    int busyFloor = 0 + std::rand() % maxFloors;
-    int destinationFloor = floorVecVec[busyEntrance][busyFloor]->genPassengers();
-    elevatorVec[busyEntrance]->setReachPoint(busyFloor);
-
-    //emit passengerGenerated(busyEntrance, destinationFloor, busyFloor);
 }
 
 void THouse::resetParam(int e, int f, int c)

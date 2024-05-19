@@ -9,7 +9,6 @@ TElevator::TElevator()
 
 TElevator::TElevator(int l) :
     maxLiftCapacity(l),
-    passengersIn(0),
     currentFloor(0), // текущий этаж лифта
     targetFloor(0),
     reachingPoints(0), // этажи цели, для пассажиров
@@ -53,11 +52,6 @@ void TElevator::moveElevator()
     loop.exec();
 }
 
-void TElevator::setState(char s)
-{
-    state = s;
-}
-
 void TElevator::setReachPoint(int destinationFloors)
 {
     reachingPoints.push_back(destinationFloors);
@@ -73,8 +67,8 @@ bool TElevator::moveToFloor()
         int minDistance = abs(currentFloor - reachingPoints[closeFloorIndx]);
         int distance = abs(currentFloor - reachingPoints[i]);
         if (distance < minDistance) {
-            if ((currentFloor - reachingPoints[i] < 0 && state == 1) ||
-                (currentFloor - reachingPoints[i] > 0 && state == -1))
+            if ((currentFloor < reachingPoints[i] && state == 1) ||
+                (currentFloor > reachingPoints[i] && state == -1))
             {
                 targetFloor = reachingPoints[i];
                 closeFloorIndx = i;

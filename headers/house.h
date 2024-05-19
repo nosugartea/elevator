@@ -26,20 +26,22 @@ public:
     void moveElevator(std::vector<int>, int);
     std::vector<TElevator*>& getElevatorVec();
     void resetParam(int, int, int);
-    int getElevatorCapacity(int entrance) { return elevatorVec[entrance]->getCapacity(); }
+    int getElevatorCapacity(int entrance) { return elevatorVec[entrance]->getPassengerIn(); }
     int getElevatorState(int entrance) { return elevatorVec[entrance]->getState(); }
     bool getElevatorDoors(int entrance) {return elevatorVec[entrance]->getDoorIsOpen(); }
+    void setPassenger(int en, int cf, int df, int count) { floorVecVec[en][cf]->setPassengers(df, count); }
+    void setDirection(int en, int d) { elevatorVec[en]->setDirection(d);}
+    bool emptyElevator(int en) { return !elevatorVec[en]->getPassengerIn(); }
 
 public slots:
-    void genPassengers();
     void onLiftMove(int floor) {
         qDebug() << "THouse >> Floor is now: Curr Floor" << floor;
     }
-    // void goOnFloor(int) { moveElevator(1);};
 
 signals:
     void liftMove(int floor);
     void passengerIn(int direction, int entrance, int floor);
+    void passengerOut(int entrance);
     void openDoors(int);
 };
 

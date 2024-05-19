@@ -171,17 +171,25 @@ void TState::showPassenger(int entrance, int dest, int appear, int count)
     update();
 }
 
-void TState::deletePassenger(int direction, int entrance, int floor)
+void TState::clearFloor(int direction, int entrance, int floor)
 {
     if (direction == 1) {
         --passengerUP[entrance][floor];
     } else if (direction == -1) {
         --passengerDOWN[entrance][floor];
     }
+    ++elevatorsPassengersIn[entrance];
+    update();
+}
+
+void TState::clearElevator(int entrance)
+{
+    --elevatorsPassengersIn[entrance];
     update();
 }
 
 void TState::openDoor(int entrance)
 {
     elevatorsDoors[entrance] = true;
+    update();
 }

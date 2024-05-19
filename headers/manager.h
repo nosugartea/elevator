@@ -37,6 +37,7 @@ class TManager : public QWidget
     int entrance;
     int currFloor;
     int destFloor;
+    int direction;
 
 
     void showButtons();
@@ -50,6 +51,10 @@ public:
         return startButton;
     }
 
+    QPushButton* getCallButton() const {
+        return callButton;
+    }
+
     void setNewParam(int, int);
     std::vector<int> getPressedNumbers() { return pressedNumbers; };
     void resetPressedNumbers() { pressedNumbers.clear(); };
@@ -58,6 +63,7 @@ public:
     int getPassengerCurFloor();
     int getPassengerDestFloor();
     int getPassengerCount();
+    int getDirection();
 
 signals:
     void closed();
@@ -84,6 +90,7 @@ private slots:
     void onCallListBoxChanged(int index);
     void onFloorDestinBoxChanged(int index);
     void onEntranceBoxChanged(int index);
+    void onDirectionBoxChanged(int index);
 };
 
 #endif // TMANAGER_H

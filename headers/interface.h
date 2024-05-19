@@ -44,8 +44,10 @@ public slots:
     void onPassengerIsMade();
     void onfloorChanged(int);
     void onStartLift();
+    void onCallLift();
     void onSetParam();
     void onPassengerIn(int, int, int);
+    void onPassengerOut(int);
     void onOpenDoors(int);
 };
 #endif // TINTERFACE_H

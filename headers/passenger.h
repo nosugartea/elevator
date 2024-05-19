@@ -8,9 +8,9 @@ class TPassenger
     int currentFloor; // текущий номер этажа ??
     char direction; // направление вверх/вниз куда нужно пассажиру
 public:
-    TPassenger(int, int);
+    TPassenger(int);
     int getStartFloor() { return currentFloor; }
-    int getDestinationFloor() { return destinationFloor; }
+    int getDestinationFloor() const { return destinationFloor; }
 };
 
 #endif // TPASSENGER_H

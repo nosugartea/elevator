@@ -25,7 +25,8 @@ public:
     void setNewParam(int, int);
     void moveElevator(int, int, int, int, bool);
     void showPassenger(int, int, int, int);
-    void deletePassenger(int, int, int);
+    void clearFloor(int, int, int);
+    void clearElevator(int);
     void openDoor(int);
 
 signals:

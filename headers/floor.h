@@ -21,20 +21,30 @@ public:
 
     ~TFloor();
 
-    int genPassengers(); // генерируем число новых пассажиров
     int getPassengersUp() { return passengersUp; }
     int getPassengersDown() { return passengersDown; }
     std::vector<TPassenger*> getPassengers() { return passengerVec; }
-    void deletePassenger(int floor) { passengerVec.erase(
-            std::remove_if(passengerVec.begin(), passengerVec.end(), [floor](TPassenger* passenger) {
-                if (passenger->getDestinationFloor() == floor) {
-                    delete passenger;
-                    return true;
-                }
-                return false;
-            }),
-            passengerVec.end()
-            );
+    void deletePassenger(int floor) {
+        auto it = std::find_if(passengerVec.begin(), passengerVec.end(),[floor](TPassenger* passenger) {
+            return passenger->getDestinationFloor() == floor;
+        });
+
+
+        if (it != passengerVec.end()) {
+            delete *it;
+            passengerVec.erase(it);
+        }
+    }
+    void setPassengers(int df, int count) {
+        for (int i = 0; i < count; ++i) {
+            TPassenger* pass = new TPassenger(df);
+            passengerVec.push_back(pass);
+            if (df < floorNum) {
+                ++passengersDown;
+            } else if (df > floorNum) {
+                ++passengersUp;
+            }
+        }
     }
 };
 
