@@ -49,11 +49,11 @@ void TInterface::resizeEvent(QResizeEvent *event)
 void TInterface::onPassengerIsMade(int entrance, int currentFloor, int destination, int count, int direction)
 {
     if (currentFloor > destination && direction == 1) {
-        QMessageBox::warning(this, "Invalid input", "Введено неправильное направление или этаж назначения.");
+        QMessageBox::warning(this, "Invalid input", "DВведено неправильное направление или этаж назначения.");
         return;
     }
     if (currentFloor < destination && direction == -1) {
-        QMessageBox::warning(this, "Invalid input", "Введено неправильное направление или этаж назначения.");
+        QMessageBox::warning(this, "Invalid input", "UВведено неправильное направление или этаж назначения.");
         return;
     }
     if (count < 0) {
