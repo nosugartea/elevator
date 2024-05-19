@@ -26,6 +26,7 @@ TInterface::TInterface(THouse *h, QWidget *parent)
     connect(managerWidget->getStartButton(), &QPushButton::clicked, this, &TInterface::onStartLift);
     connect(paramWidget->getSetParamButton(), &QPushButton::clicked, this, &TInterface::onSetParam);
     connect(managerWidget, &TManager::passengerIsMade, this, &TInterface::onPassengerIsMade);
+    connect(house, &THouse::showPassenger, this, &TInterface::onShowPassenger);
     connect(house, &THouse::passengerIn, this, &TInterface::onPassengerIn);
     connect(house, &THouse::passengerOut, this, &TInterface::onPassengerOut);
     connect(house, &THouse::openDoors, this, &TInterface::onOpenDoors);
@@ -61,7 +62,7 @@ void TInterface::onPassengerIsMade(int entrance, int currentFloor, int destinati
         return;
     }
 
-    stateWidget->showPassenger(entrance, destination, currentFloor, count);
+    //stateWidget->showPassenger(entrance, destination, currentFloor, count);
     house->setPassenger(entrance, currentFloor, destination, count);
     house->setDirection(entrance, direction);
 
@@ -133,6 +134,11 @@ void TInterface::onPassengerOut(int entrance)
 void TInterface::onOpenDoors(int entrance)
 {
     stateWidget->openDoor(entrance);
+}
+
+void TInterface::onShowPassenger(int entrance, int dest, int appear, int count)
+{
+    stateWidget->showPassenger(entrance, dest, appear, count);
 }
 
 TInterface::~TInterface()

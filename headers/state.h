@@ -22,15 +22,15 @@ public:
     TState(int, int, QWidget *parent = 0);
     ~TState();
 
+    void showPassenger(int entrance, int dest, int appear, int count);
     void setNewParam(int, int);
     void moveElevator(int, int, int, int, bool);
-    void showPassenger(int, int, int, int);
     void clearFloor(int, int, int);
     void clearElevator(int);
     void openDoor(int);
 
 signals:
-    void closed();
+    void closed();    
 
 protected:
     void closeEvent(QCloseEvent*) override;

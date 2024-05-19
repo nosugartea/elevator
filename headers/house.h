@@ -29,7 +29,11 @@ public:
     int getElevatorCapacity(int entrance) { return elevatorVec[entrance]->getPassengerIn(); }
     int getElevatorState(int entrance) { return elevatorVec[entrance]->getState(); }
     bool getElevatorDoors(int entrance) {return elevatorVec[entrance]->getDoorIsOpen(); }
-    void setPassenger(int en, int cf, int df, int count) { floorVecVec[en][cf]->setPassengers(df, count); }
+    void setPassenger(int en, int cf, int df, int count)
+    {
+        int newPass = floorVecVec[en][cf]->setPassengers(df, count);
+        emit showPassenger(en, df, cf, newPass);
+    }
     void setDirection(int en, int d) { elevatorVec[en]->setDirection(d);}
     bool emptyElevator(int en) { return !elevatorVec[en]->getPassengerIn(); }
 
@@ -39,6 +43,7 @@ public slots:
     }
 
 signals:
+    void showPassenger(int entrance, int dest, int appear, int count);
     void liftMove(int floor);
     void passengerIn(int direction, int entrance, int floor);
     void passengerOut(int entrance);
