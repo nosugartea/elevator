@@ -7,13 +7,12 @@ TManager::TManager(int e, int f, QWidget *parent) : QWidget(parent),
     entrances(e),
     floors(f),
     activeEntrance(0),
-    passengerEntrance(0),
     passengerCurrFloor(0),
     passengerDestFloor(0),
     passengerDirection(1)
 {
     comboBox = new QComboBox(this);
-    comboBox->setStyleSheet(comboBoxStyle);
+    comboBox->setStyleSheet(comboBoxStyle1);
     comboBox->setFixedSize(110, 50);
     comboBox->move(0, 0);
 
@@ -25,27 +24,20 @@ TManager::TManager(int e, int f, QWidget *parent) : QWidget(parent),
     startButton->setStyleSheet(startButtonStyle);
 
     callButton = new QPushButton("Вызвать", this);
+    callButton->setStyleSheet(buttonStyle);
 
-    entranceLab = new QLabel("Подъезд", this);
     callListLab = new QLabel("Вызвать на этаже", this);
     directionLab = new QLabel("Направление", this);
     countPassengersLab = new QLabel("Количество пассажиров", this);
     floorDestinLab = new QLabel("Этаж назначения", this);
 
-    entranceBox = new QComboBox(this);
     callListBox = new QComboBox(this);
     floorDestinBox = new QComboBox(this);
     directionBox = new QComboBox(this);
 
-    entranceBox->setStyleSheet(comboBoxStyle);
-    callListBox->setStyleSheet(comboBoxStyle);
-    floorDestinBox->setStyleSheet(comboBoxStyle);
-    directionBox->setStyleSheet(comboBoxStyle);
-
     countPassengersEdt = new QLineEdit(this);
 
     connect(callButton, &QPushButton::clicked, this, &TManager::onMakePassenger);
-    connect(entranceBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onEntranceBoxChanged);
     connect(callListBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onCallListBoxChanged);
     connect(floorDestinBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onFloorDestinBoxChanged);
     connect(directionBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onDirectionBoxChanged);
@@ -64,11 +56,9 @@ TManager::~TManager()
     delete directionLab;
     delete countPassengersLab;
     delete floorDestinLab;
-    delete entranceLab;
     delete callListBox;
     delete directionBox;
     delete floorDestinBox;
-    delete entranceBox;
     delete countPassengersEdt;
 
     for (TLiftButton* button : buttons) {
@@ -123,24 +113,18 @@ void TManager::showMenu()
     int widthLab = 150;
     int height = 25;
 
-    callButton->setGeometry(startX, startY + 5 * spacingY, width, height);
+    callButton->setGeometry(startX + 60, startY + 5 * spacingY, width, height);
 
-    entranceLab->setGeometry(startX, startY, widthLab, height);
     callListLab->setGeometry(startX, startY + spacingY, widthLab, height);
     directionLab->setGeometry(startX, startY + 2 * spacingY, widthLab, height);
     countPassengersLab->setGeometry(startX, startY + 3 * spacingY, widthLab, height);
     floorDestinLab->setGeometry(startX, startY + 4 * spacingY, widthLab, height);
 
-    entranceBox->setGeometry(startX + spacingX, startY, width, height);
     callListBox->setGeometry(startX + spacingX, startY + spacingY, width, height);
     floorDestinBox->setGeometry(startX + spacingX, startY + 4 * spacingY, width, height);
     directionBox->setGeometry(startX + spacingX, startY + 2 * spacingY, width, height);
 
     countPassengersEdt->setGeometry(startX + spacingX, startY + 3 * spacingY, width, height);
-
-    for (int i = 0; i < entrances; ++i) {
-        entranceBox->addItem(QString::number(i + 1));
-    }
 
     for (int i = 0; i < floors; ++i) {
         callListBox->addItem(QString::number(i + 1));
@@ -165,7 +149,6 @@ void TManager::setNewParam(int e, int f)
 {
 
     comboBox->clear();
-    entranceBox->clear();
     callListBox->clear();
     floorDestinBox->clear();
     directionBox->clear();
@@ -193,7 +176,7 @@ int TManager::getActiveEntrance()
 
 int TManager::getPassengerEntrance()
 {
-    return passengerEntrance;
+    return activeEntrance;
 }
 
 int TManager::getPassengerCurFloor()
@@ -215,7 +198,7 @@ void TManager::resetButtons(int id)
 
 void TManager::onMakePassenger()
 {
-    emit passengerIsMade(passengerEntrance, passengerCurrFloor, passengerDestFloor, countPassengersEdt->text().toInt(), passengerDirection);
+    emit passengerIsMade(activeEntrance, passengerCurrFloor, passengerDestFloor, countPassengersEdt->text().toInt(), passengerDirection);
 }
 
 void TManager::onCallListBoxChanged(int index)
@@ -226,11 +209,6 @@ void TManager::onCallListBoxChanged(int index)
 void TManager::onFloorDestinBoxChanged(int index)
 {
     passengerDestFloor = index;
-}
-
-void TManager::onEntranceBoxChanged(int index)
-{
-    passengerEntrance = index;
 }
 
 void TManager::onDirectionBoxChanged(int index)

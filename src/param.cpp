@@ -1,4 +1,5 @@
 #include "param.h"
+#include "myStyleSheets.h"
 
 #include <QMessageBox>
 
@@ -20,6 +21,7 @@ TParam::TParam(QWidget *parent)
     liftCapacityEdt->setGeometry(140,75,25,25);
 
     setParameters = new QPushButton("Изменить", this);
+    setParameters->setStyleSheet(buttonStyle);
     setParameters->setGeometry(35,110,100,25);
 }
 

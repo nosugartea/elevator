@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     src/liftButton.cpp \
+    src/myStyleSheets.cpp \
     src\elevator.cpp \
     src\floor.cpp \
     src\house.cpp \

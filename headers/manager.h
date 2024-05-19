@@ -23,18 +23,15 @@ class TManager : public QWidget
     QLabel* directionLab;
     QLabel* countPassengersLab;
     QLabel* floorDestinLab;
-    QLabel* entranceLab;
     QComboBox* callListBox;
     QComboBox* directionBox;
     QComboBox* floorDestinBox;
-    QComboBox* entranceBox;
     QLineEdit* countPassengersEdt;
 
     std::vector<TLiftButton*> buttons;
     std::vector<int> pressedNumbers;
     int activeEntrance;
 
-    int passengerEntrance;
     int passengerCurrFloor;
     int passengerDestFloor;
     int passengerDirection;
@@ -66,7 +63,6 @@ private slots:
     void onMakePassenger();
     void onCallListBoxChanged(int index);
     void onFloorDestinBoxChanged(int index);
-    void onEntranceBoxChanged(int index);
     void onDirectionBoxChanged(int index);
 };
 
