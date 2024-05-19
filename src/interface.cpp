@@ -82,7 +82,7 @@ void TInterface::onStartLift()
 {
     int activeEntrance = managerWidget->getActiveEntrance();
     std::vector<int> goFloors = managerWidget->getPressedNumbers();
-    if (goFloors.empty()) return;
+    // if (goFloors.empty()) return;
     if(house->emptyElevator(activeEntrance)) return;
     managerWidget->resetPressedNumbers();
     house->moveElevator(goFloors, activeEntrance);

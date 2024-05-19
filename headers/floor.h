@@ -28,8 +28,13 @@ public:
             return passenger->getDestinationFloor() == floor;
         });
 
-
         if (it != passengerVec.end()) {
+            if (floor < floorNum) {
+                --passengersDown;
+            }
+            if (floor > floorNum) {
+                --passengersUp;
+            }
             delete *it;
             passengerVec.erase(it);
         }

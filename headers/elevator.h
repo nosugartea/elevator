@@ -35,13 +35,18 @@ public:
     int getCurrentFloor() { return currentFloor; }
     int getPassengerIn() { return passengersIn.size(); }
     void setPassengerIn(TPassenger p) { passengersIn.push_back(p); }
-    bool popPassenger() {
+    bool popPassenger(bool end)
+    {
         int sizeOld = passengersIn.size();
-        auto it = std::find_if(passengersIn.begin(), passengersIn.end(), [=](const TPassenger& passenger) {
-            return passenger.getDestinationFloor() == currentFloor;
-        });
-        if (it != passengersIn.end()) {
-            passengersIn.erase(it);
+        if (end && !passengersIn.empty()) {
+            passengersIn.erase(passengersIn.begin());
+        } else if (!passengersIn.empty()) {
+            auto it = std::find_if(passengersIn.begin(), passengersIn.end(), [=](const TPassenger& passenger) {
+                return passenger.getDestinationFloor() == currentFloor;
+            });
+            if (it != passengersIn.end()) {
+                passengersIn.erase(it);
+            }
         }
         return sizeOld - passengersIn.size();
     }

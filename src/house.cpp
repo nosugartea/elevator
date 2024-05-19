@@ -48,11 +48,17 @@ void THouse::moveElevator(std::vector<int> destinFloors, int elevatorIndex)
         } while (!elevatorVec[elevatorIndex]->moveToFloor());
         emit openDoors(elevatorIndex);
 
-        while (elevatorVec[elevatorIndex]->popPassenger()) {
+        while (elevatorVec[elevatorIndex]->popPassenger(false)) {
             emit passengerOut(elevatorIndex);
         }
 
         int currFloor = elevatorVec[elevatorIndex]->getCurrentFloor();
+        if (currFloor == 0 || currFloor == maxFloors - 1) {
+            while (elevatorVec[elevatorIndex]->popPassenger(true)) {
+                emit passengerOut(elevatorIndex);
+            }
+        }
+
         emit elevatorArrived(currFloor);
         std::vector<TPassenger*> passengersWait = floorVecVec[elevatorIndex][currFloor]->getPassengers();
         for (int i = 0; i < passengersWait.size(); ++i) {
