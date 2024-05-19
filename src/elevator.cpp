@@ -4,9 +4,6 @@
 #include <QEventLoop>
 #include <algorithm>
 
-TElevator::TElevator()
-{}
-
 TElevator::TElevator(int l) :
     maxLiftCapacity(l),
     currentFloor(0), // текущий этаж лифта
@@ -106,3 +103,61 @@ bool TElevator::moveToFloor()
 
     return onFloor;
 }
+
+int TElevator::getState()
+{
+    return state;
+}
+
+int TElevator::getCurrentFloor()
+{
+    return currentFloor;
+}
+
+int TElevator::getPassengerIn()
+{
+    return passengersIn.size();
+}
+
+void TElevator::setPassengerIn(TPassenger p)
+{
+    passengersIn.push_back(p);
+}
+
+bool TElevator::popPassenger(bool end)
+{
+    int sizeOld = passengersIn.size();
+    if (end && !passengersIn.empty()) {
+        passengersIn.erase(passengersIn.begin());
+    } else if (!passengersIn.empty()) {
+        auto it = std::find_if(passengersIn.begin(), passengersIn.end(), [=](const TPassenger& passenger) {
+            return passenger.getDestinationFloor() == currentFloor;
+        });
+        if (it != passengersIn.end()) {
+            passengersIn.erase(it);
+        }
+    }
+    return sizeOld - passengersIn.size();
+}
+
+void TElevator::setDoorIsOpen(bool ok)
+{
+    doorIsOpen = ok;
+}
+
+bool TElevator::getDoorIsOpen()
+{
+    return doorIsOpen;
+}
+
+void TElevator::setDirection(int d)
+{
+    lastDirect = d;
+}
+
+int TElevator::getLastDirect()
+{
+    return lastDirect;
+}
+
+TElevator::~TElevator() {}

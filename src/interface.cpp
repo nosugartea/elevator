@@ -147,5 +147,8 @@ void TInterface::onElevatorArrived(int floor)
 
 TInterface::~TInterface()
 {
+    delete stateWidget;
+    delete paramWidget;
+    delete managerWidget;
 }
 

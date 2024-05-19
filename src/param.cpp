@@ -25,6 +25,14 @@ TParam::TParam(QWidget *parent)
 
 TParam::~TParam()
 {
+
+    delete floorsSizeLab;
+    delete entrancesSizeLab;
+    delete liftCapacityLab;
+    delete floorsSizeEdt;
+    delete entrancesSizeEdt;
+    delete liftCapacityEdt;
+    delete setParameters;
 }
 
 QPushButton* TParam::getSetParamButton() const

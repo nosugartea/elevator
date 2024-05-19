@@ -37,6 +37,11 @@ TManager::TManager(int e, int f, QWidget *parent) : QWidget(parent),
     floorDestinBox = new QComboBox(this);
     directionBox = new QComboBox(this);
 
+    entranceBox->setStyleSheet(comboBoxStyle);
+    callListBox->setStyleSheet(comboBoxStyle);
+    floorDestinBox->setStyleSheet(comboBoxStyle);
+    directionBox->setStyleSheet(comboBoxStyle);
+
     countPassengersEdt = new QLineEdit(this);
 
     connect(callButton, &QPushButton::clicked, this, &TManager::onMakePassenger);
@@ -49,7 +54,28 @@ TManager::TManager(int e, int f, QWidget *parent) : QWidget(parent),
     showButtons();
 }
 
-TManager::~TManager(){}
+TManager::~TManager()
+{
+    delete comboBox;
+    delete startButton;
+    delete callButton;
+    delete entrancesLab;
+    delete callListLab;
+    delete directionLab;
+    delete countPassengersLab;
+    delete floorDestinLab;
+    delete entranceLab;
+    delete callListBox;
+    delete directionBox;
+    delete floorDestinBox;
+    delete entranceBox;
+    delete countPassengersEdt;
+
+    for (TLiftButton* button : buttons) {
+        delete button;
+    }
+    buttons.clear();
+}
 
 void TManager::showButtons()
 {

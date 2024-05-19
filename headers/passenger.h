@@ -6,7 +6,7 @@ class TPassenger
     int destinationFloor; // номер этажа нужный пассажиру
 public:
     TPassenger(int);
-    int getDestinationFloor() const { return destinationFloor; }
+    int getDestinationFloor() const;
 };
 
 #endif // TPASSENGER_H

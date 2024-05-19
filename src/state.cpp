@@ -41,6 +41,7 @@ TState::TState(int e, int f, QWidget *parent)
 
 TState::~TState()
 {
+    delete passengerInfo;
 }
 
 void TState::paintEvent(QPaintEvent*)

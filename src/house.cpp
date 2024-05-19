@@ -19,6 +19,21 @@ THouse::THouse(int e,int f,int c) :
     }
 }
 
+THouse::~THouse()
+{
+    for (auto& floorVec : floorVecVec) {
+        for (TFloor* floor : floorVec) {
+            delete floor;
+        }
+    }
+    floorVecVec.clear();
+
+    for (TElevator* elevator : elevatorVec) {
+        delete elevator;
+    }
+    elevatorVec.clear();
+}
+
 int THouse::getEntrancesCount()
 {
     return maxEntrances;
@@ -115,4 +130,35 @@ void THouse::resetParam(int e, int f, int c)
     for (int i = 0; i < maxEntrances; ++i) {
         elevatorVec[i] = new TElevator(maxLiftCapacity);
     }
+}
+
+int THouse::getElevatorCapacity(int entrance)
+{
+    return elevatorVec[entrance]->getPassengerIn();
+}
+
+int THouse::getElevatorState(int entrance)
+{
+    return elevatorVec[entrance]->getState();
+}
+
+bool THouse::getElevatorDoors(int entrance)
+{
+    return elevatorVec[entrance]->getDoorIsOpen();
+}
+
+void THouse::setPassenger(int en, int cf, int df, int count)
+{
+    int newPass = floorVecVec[en][cf]->setPassengers(df, count);
+    emit showPassenger(en, df, cf, newPass);
+}
+
+void THouse::setDirection(int en, int d)
+{
+    elevatorVec[en]->setDirection(d);
+}
+
+bool THouse::emptyElevator(int en)
+{
+    return !elevatorVec[en]->getPassengerIn();
 }
