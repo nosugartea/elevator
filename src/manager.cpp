@@ -23,7 +23,6 @@ TManager::TManager(int e, int f, QWidget *parent) : QWidget(parent),
     startButton = new QPushButton("Начать", this);
     startButton->setFixedSize(50, 50);
     startButton->setStyleSheet(startButtonStyle);
-    connect(startButton, &QPushButton::clicked, this, &TManager::onResetButtons);
 
     callButton = new QPushButton("Вызвать", this);
 
@@ -91,7 +90,7 @@ void TManager::showButtons()
 void TManager::showMenu()
 {
     int startX = 150;
-    int startY = 200;
+    int startY = 180;
     int spacingY = 30;
     int spacingX = 160;
     int width = 70;
@@ -183,11 +182,9 @@ void TManager::onStartButtonPressed(int number)
     }
 }
 
-void TManager::onResetButtons()
+void TManager::resetButtons(int id)
 {
-    for (TLiftButton *button : buttons) {
-        button->resetButton();
-    }
+    buttons[id]->resetButton();
 }
 
 void TManager::onMakePassenger()

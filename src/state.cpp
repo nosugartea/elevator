@@ -33,6 +33,10 @@ TState::TState(int e, int f, QWidget *parent)
     for (int i = 0; i < entrances; ++i) {
         elevatorsDoors.push_back(true);
     }
+
+    passengerInfo = new QTextEdit("", this);
+    passengerInfo->setFixedSize(250, 100);
+    passengerInfo->move(150 * (entrances + 1) + 10, 380);
 }
 
 TState::~TState()
@@ -101,12 +105,6 @@ void TState::paintEvent(QPaintEvent*)
     }
 }
 
-void TState::closeEvent(QCloseEvent *event)
-{
-    emit closed();
-    QWidget::closeEvent(event);
-}
-
 void TState::setNewParam(int e, int f)
 {
     entrances = e;
@@ -144,8 +142,10 @@ void TState::setNewParam(int e, int f)
     }
 
     for (int i = 0; i < entrances; ++i) {
-        elevatorsDoors.push_back(0);
+        elevatorsDoors.push_back(1);
     }
+
+    update();
 }
 
 void TState::moveElevator(int entrance, int floor, int passengersIn, int state, bool doors)
@@ -168,6 +168,13 @@ void TState::showPassenger(int entrance, int dest, int appear, int count)
         passengerDOWN[entrance][appear] += count;
         direct = 'D';
     }
+
+    QString currentText = passengerInfo->toPlainText();
+    QString newText = "Подъезд " + QString::number(entrance + 1) + ": Пассажирам " + QString::number(appear + 1) + direct + " нужен этаж " + QString::number(dest + 1);
+    currentText.append(newText + "\n");
+
+    passengerInfo->setPlainText(currentText);
+
     update();
 }
 

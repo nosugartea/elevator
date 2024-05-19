@@ -2,6 +2,7 @@
 #define TSTATE_H
 
 #include <QWidget>
+#include <QTextEdit>
 #include <QCloseEvent>
 #include <vector>
 
@@ -17,6 +18,7 @@ class TState : public QWidget
     std::vector<int> elevatorsPassengersIn;
     std::vector<std::vector<int>> passengerUP;
     std::vector<std::vector<int>> passengerDOWN;
+    QTextEdit* passengerInfo;
 
 public:
     TState(int, int, QWidget *parent = 0);
@@ -27,13 +29,9 @@ public:
     void moveElevator(int, int, int, int, bool);
     void clearFloor(int, int, int);
     void clearElevator(int);
-    void openDoor(int);
-
-signals:
-    void closed();    
+    void openDoor(int); 
 
 protected:
-    void closeEvent(QCloseEvent*) override;
     void paintEvent(QPaintEvent *event) override;
 };
 

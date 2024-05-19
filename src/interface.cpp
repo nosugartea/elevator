@@ -18,10 +18,9 @@ TInterface::TInterface(THouse *h, QWidget *parent)
     managerWidget = new TManager(entrances, floors, this);
     paramWidget = new TParam(this);
 
-    stateWidget->setFixedSize(stateSizeX, stateSizeY);
-    managerWidget->setFixedSize(stateSizeX + 100, stateSizeY);
+    stateWidget->setFixedSize(stateSizeX + 430, stateSizeY);
+    managerWidget->setFixedSize(stateSizeX + 100, stateSizeY - 100);
     paramWidget->setFixedSize(200, 150);
-
 
     connect(managerWidget->getStartButton(), &QPushButton::clicked, this, &TInterface::onStartLift);
     connect(paramWidget->getSetParamButton(), &QPushButton::clicked, this, &TInterface::onSetParam);
@@ -29,6 +28,7 @@ TInterface::TInterface(THouse *h, QWidget *parent)
     connect(house, &THouse::showPassenger, this, &TInterface::onShowPassenger);
     connect(house, &THouse::passengerIn, this, &TInterface::onPassengerIn);
     connect(house, &THouse::passengerOut, this, &TInterface::onPassengerOut);
+    connect(house, &THouse::elevatorArrived, this, &TInterface::onElevatorArrived); //
     connect(house, &THouse::openDoors, this, &TInterface::onOpenDoors);
 
     const std::vector<TElevator*>& elevators = house->getElevatorVec();
@@ -62,7 +62,6 @@ void TInterface::onPassengerIsMade(int entrance, int currentFloor, int destinati
         return;
     }
 
-    //stateWidget->showPassenger(entrance, destination, currentFloor, count);
     house->setPassenger(entrance, currentFloor, destination, count);
     house->setDirection(entrance, direction);
 
@@ -114,7 +113,7 @@ void TInterface::onSetParam()
 
     setFixedSize(stateSizeX + 430, stateSizeY);
 
-    stateWidget->setFixedSize(stateSizeX, stateSizeY);
+    stateWidget->setFixedSize(stateSizeX + 430, stateSizeY);
     stateWidget->setNewParam(e, f);
 
     managerWidget->setFixedSize(stateSizeX + 100, stateSizeY);
@@ -139,6 +138,11 @@ void TInterface::onOpenDoors(int entrance)
 void TInterface::onShowPassenger(int entrance, int dest, int appear, int count)
 {
     stateWidget->showPassenger(entrance, dest, appear, count);
+}
+
+void TInterface::onElevatorArrived(int floor)
+{
+    managerWidget->resetButtons(floor);
 }
 
 TInterface::~TInterface()

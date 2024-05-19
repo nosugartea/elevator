@@ -50,20 +50,19 @@ public:
     QPushButton* getStartButton() const;
     QPushButton* getCallButton() const;
 
-    void resetPressedNumbers(); //
+    void resetPressedNumbers();
     void setNewParam(int, int);
     std::vector<int> getPressedNumbers();
     int getActiveEntrance();
     int getPassengerEntrance();
     int getPassengerCurFloor();
-
+    void resetButtons(int);
 
 signals:
     void passengerIsMade(int, int, int, int, int);
 
 private slots:
     void onStartButtonPressed(int number);
-    void onResetButtons(); //
     void onMakePassenger();
     void onCallListBoxChanged(int index);
     void onFloorDestinBoxChanged(int index);

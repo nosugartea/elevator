@@ -53,6 +53,7 @@ void THouse::moveElevator(std::vector<int> destinFloors, int elevatorIndex)
         }
 
         int currFloor = elevatorVec[elevatorIndex]->getCurrentFloor();
+        emit elevatorArrived(currFloor);
         std::vector<TPassenger*> passengersWait = floorVecVec[elevatorIndex][currFloor]->getPassengers();
         for (int i = 0; i < passengersWait.size(); ++i) {
             int goFloor = passengersWait[i]->getDestinationFloor();
@@ -108,6 +109,4 @@ void THouse::resetParam(int e, int f, int c)
     for (int i = 0; i < maxEntrances; ++i) {
         elevatorVec[i] = new TElevator(maxLiftCapacity);
     }
-
-    qDebug() << "House::resetParam >> " << floorVecVec.size() << " " << floorVecVec[0].size() << " " << maxLiftCapacity;
 }

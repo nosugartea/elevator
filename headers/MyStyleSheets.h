@@ -44,18 +44,5 @@ QPushButton:pressed {
                         stop:1 rgba(63, 148, 108, 0.5));}
 )";
 
-const char* liftButtonStyle = R"(
-QPushButton {
-    border-radius: 25px;
-    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1,
-    stop:0 rgba(88, 205, 174, 0.3),
-    stop:1 rgba(63, 148, 108, 0.3));}
-
-QPushButton:checked {
-    border-radius: 25px;
-    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1,
-    stop:0 rgba(88, 205, 174, 1),
-    stop:1 rgba(63, 148, 108, 1));}
-)";
 
 #endif // MYSTYLESHEETS_H

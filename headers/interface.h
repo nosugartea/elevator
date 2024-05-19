@@ -42,5 +42,6 @@ public slots:
     void onPassengerOut(int);
     void onOpenDoors(int);
     void onShowPassenger(int, int, int, int);
+    void onElevatorArrived(int);
 };
 #endif // TINTERFACE_H

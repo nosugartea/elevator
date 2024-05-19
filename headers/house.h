@@ -48,6 +48,7 @@ signals:
     void passengerIn(int direction, int entrance, int floor);
     void passengerOut(int entrance);
     void openDoors(int);
+    void elevatorArrived(int);
 };
 
 #endif // THOUSE_H
