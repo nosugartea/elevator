@@ -36,7 +36,7 @@ TState::TState(int e, int f, QWidget *parent)
 
     passengerInfo = new QTextEdit("", this);
     passengerInfo->setFixedSize(250, 100);
-    passengerInfo->move(150 * (entrances + 1) + 10, 380);
+    passengerInfo->move(150 * (entrances + 1) + 10, 330);
 }
 
 TState::~TState()
@@ -146,6 +146,7 @@ void TState::setNewParam(int e, int f)
         elevatorsDoors.push_back(1);
     }
 
+    passengerInfo->move(150 * (entrances + 1) + 10, 330);
     update();
 }
 

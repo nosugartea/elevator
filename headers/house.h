@@ -35,7 +35,6 @@ public:
 
 signals:
     void showPassenger(int entrance, int dest, int appear, int count);
-    void liftMove(int floor);
     void passengerIn(int direction, int entrance, int floor);
     void passengerOut(int entrance);
     void openDoors(int);

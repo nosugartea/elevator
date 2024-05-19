@@ -19,10 +19,7 @@ class TElevator : public QObject
     bool doorIsOpen;
     int millisecondsPerFloor;
     std::vector<TPassenger> passengersIn;
-
-private slots:
     void moveElevator();
-
 public:
     TElevator(int);
     ~TElevator();

@@ -106,7 +106,7 @@ void TManager::showButtons()
 void TManager::showMenu()
 {
     int startX = 150;
-    int startY = 180;
+    int startY = 140;
     int spacingY = 30;
     int spacingX = 160;
     int width = 70;
