@@ -34,10 +34,10 @@ class TManager : public QWidget
     std::vector<int> pressedNumbers;
     int activeEntrance;
 
-    int entrance;
-    int currFloor;
-    int destFloor;
-    int direction;
+    int passengerEntrance;
+    int passengerCurrFloor;
+    int passengerDestFloor;
+    int passengerDirection;
 
 
     void showButtons();
@@ -47,46 +47,24 @@ public:
     TManager(int, int, QWidget *parent = 0);
     ~TManager();
 
-    QPushButton* getStartButton() const {
-        return startButton;
-    }
+    QPushButton* getStartButton() const;
+    QPushButton* getCallButton() const;
 
-    QPushButton* getCallButton() const {
-        return callButton;
-    }
-
+    void resetPressedNumbers(); //
     void setNewParam(int, int);
-    std::vector<int> getPressedNumbers() { return pressedNumbers; };
-    void resetPressedNumbers() { pressedNumbers.clear(); };
-    int getActiveEntrance() { return activeEntrance; }
+    std::vector<int> getPressedNumbers();
+    int getActiveEntrance();
     int getPassengerEntrance();
     int getPassengerCurFloor();
-    int getPassengerDestFloor();
-    int getPassengerCount();
-    int getDirection();
+
 
 signals:
-    void closed();
-    void passengerIsMade();
-
-protected:
-    void closeEvent(QCloseEvent*) override;
+    void passengerIsMade(int, int, int, int, int);
 
 private slots:
-    void handleButtonPressed(int number) {
-        if (std::find(pressedNumbers.begin(), pressedNumbers.end(), number) == pressedNumbers.end()) {
-            pressedNumbers.push_back(number);
-        }
-    }
-
-    void resetButtons() {
-        for (TLiftButton *button : buttons) {
-            button->resetButton();
-        }
-    }
-
-    void makePassenger();
-
+    void onStartButtonPressed(int number);
+    void onResetButtons(); //
+    void onMakePassenger();
     void onCallListBoxChanged(int index);
     void onFloorDestinBoxChanged(int index);
     void onEntranceBoxChanged(int index);

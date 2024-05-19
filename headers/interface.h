@@ -40,8 +40,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 public slots:
-    // Слот для обработки создания пассажира
-    void onPassengerIsMade();
+    void onPassengerIsMade(int, int, int, int, int);
     void onfloorChanged(int);
     void onStartLift();
     void onCallLift();

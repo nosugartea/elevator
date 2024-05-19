@@ -27,10 +27,9 @@ TParam::~TParam()
 {
 }
 
-void TParam::closeEvent(QCloseEvent *event)
+QPushButton* TParam::getSetParamButton() const
 {
-    emit closed();
-    QWidget::closeEvent(event);
+    return setParameters;
 }
 
 int TParam::getFloorsSize()

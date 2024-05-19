@@ -25,18 +25,10 @@ public:
     TParam(QWidget *parent = 0);
     ~TParam();
 
-    QPushButton* getSetParamButton() const {
-        return setParameters;
-    }
+    QPushButton* getSetParamButton() const;
     int getFloorsSize();
     int getEntrancesSize();
     int getLiftCapacity();
-
-signals:
-    void closed();
-
-protected:
-    void closeEvent(QCloseEvent*);
 };
 
 #endif // TPARAM_H

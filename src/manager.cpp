@@ -3,34 +3,20 @@
 #include <QGridLayout>
 #include "myStyleSheets.h"
 
-TManager::TManager(int e, int f, QWidget *parent)
-    : QWidget(parent), entrances(e), floors(f), activeEntrance(0)
+TManager::TManager(int e, int f, QWidget *parent) : QWidget(parent),
+    entrances(e),
+    floors(f),
+    activeEntrance(0),
+    passengerEntrance(0),
+    passengerCurrFloor(0),
+    passengerDestFloor(0),
+    passengerDirection(1)
 {
-    entrance = 0;
-    currFloor = 1;
-    destFloor = 1;
-    direction = 1;
-
-    comboBox = new QComboBox(this);
-    for (int i = 0; i < entrances; ++i) {
-        comboBox->addItem("Подъезд " + QString::number(i+1));
-    }
-
-    comboBox->setStyleSheet(comboBoxStyle);
-    comboBox->setFixedSize(110, 50);
-    comboBox->move(0, 0);
-
-    QObject::connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-                     [&](int index){ activeEntrance = index; });
-
-    startButton = new QPushButton("Начать", this);
-    startButton->setFixedSize(50, 50);
-    startButton->setStyleSheet(startButtonStyle);
-    connect(startButton, &QPushButton::clicked, this, &TManager::resetButtons);
-
     showMenu();
     showButtons();
 }
+
+TManager::~TManager(){}
 
 void TManager::showButtons()
 {
@@ -42,7 +28,28 @@ void TManager::showButtons()
     int startX = 0;
     int startY = 60;
 
-    startButton->move(startX+(buttonSize + buttonSpacing)/2,numRows * (buttonSize + buttonSpacing) + startY);
+    if (comboBox == nullptr) {
+        comboBox = new QComboBox(this);
+        comboBox->setStyleSheet(comboBoxStyle);
+        comboBox->setFixedSize(110, 50);
+        comboBox->move(0, 0);
+
+        QObject::connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+                         [&](int index){ activeEntrance = index; });
+
+        startButton = new QPushButton("Начать", this);
+        startButton->setFixedSize(50, 50);
+        startButton->setStyleSheet(startButtonStyle);
+        connect(startButton, &QPushButton::clicked, this, &TManager::onResetButtons);
+
+    }
+
+    comboBox->clear();
+    for (int i = 0; i < entrances; ++i) {
+        comboBox->addItem("Подъезд " + QString::number(i+1));
+    }
+
+    startButton->move(startX + (buttonSize + buttonSpacing)/2, numRows * (buttonSize + buttonSpacing) + startY);
 
     if (!buttons.empty()) {
         for (TLiftButton* button : buttons) {
@@ -57,7 +64,7 @@ void TManager::showButtons()
             if (number > floors) return;
             TLiftButton *button = new TLiftButton(number, this);
             button->move(startX + j * (buttonSize + buttonSpacing), startY + i * (buttonSize + buttonSpacing));
-            connect(button, &TLiftButton::buttonPressed, this, &TManager::handleButtonPressed);
+            connect(button, &TLiftButton::buttonPressed, this, &TManager::onStartButtonPressed);
             buttons.push_back(button);
         }
     }
@@ -73,117 +80,147 @@ void TManager::showMenu()
     int widthLab = 150;
     int height = 25;
 
-    callButton = new QPushButton("Вызвать", this);
-    callButton->setGeometry(startX, startY + 5 * spacingY, width, height);
-    connect(callButton, &QPushButton::clicked, this, &TManager::makePassenger);
+    if (callButton == nullptr) {
+        callButton = new QPushButton("Вызвать", this);
 
-    entranceLab = new QLabel("Подъезд", this);
-    entranceLab->setGeometry(startX, startY, widthLab, height);
+        entranceLab = new QLabel("Подъезд", this);
+        callListLab = new QLabel("Вызвать на этаже", this);
+        directionLab = new QLabel("Направление", this);
+        countPassengersLab = new QLabel("Количество пассажиров", this);
+        floorDestinLab = new QLabel("Этаж назначения", this);
 
-    callListLab = new QLabel("Вызвать на этаже", this);
-    callListLab->setGeometry(startX, startY + spacingY, widthLab, height);
+        entranceBox = new QComboBox(this);
+        callListBox = new QComboBox(this);
+        floorDestinBox = new QComboBox(this);
+        directionBox = new QComboBox(this);
 
-    directionLab = new QLabel("Направление", this);
-    directionLab->setGeometry(startX, startY + 2 * spacingY, widthLab, height);
+        countPassengersEdt = new QLineEdit(this);
 
-    countPassengersLab = new QLabel("Количество пассажиров", this);
-    countPassengersLab->setGeometry(startX, startY + 3 * spacingY, widthLab, height);
+        connect(callButton, &QPushButton::clicked, this, &TManager::onMakePassenger);
+        connect(entranceBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onEntranceBoxChanged);
+        connect(callListBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onCallListBoxChanged);
+        connect(floorDestinBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onFloorDestinBoxChanged);
+        connect(directionBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onDirectionBoxChanged);
 
-    floorDestinLab = new QLabel("Этаж назначения", this);
-    floorDestinLab->setGeometry(startX, startY + 4 * spacingY, widthLab, height);
+        callButton->setGeometry(startX, startY + 5 * spacingY, width, height);
 
-    callListBox = new QComboBox(this);
-    callListBox->setGeometry(startX + spacingX, startY + spacingY, width, height);
-    floorDestinBox = new QComboBox(this);
-    floorDestinBox->setGeometry(startX + spacingX, startY + 4 * spacingY, width, height);
-    for (int j = 0; j < floors; ++j) {
-        callListBox->addItem(QString::number(j + 1));
-        floorDestinBox->addItem(QString::number(j + 1));
+        entranceLab->setGeometry(startX, startY, widthLab, height);
+        callListLab->setGeometry(startX, startY + spacingY, widthLab, height);
+        directionLab->setGeometry(startX, startY + 2 * spacingY, widthLab, height);
+        countPassengersLab->setGeometry(startX, startY + 3 * spacingY, widthLab, height);
+        floorDestinLab->setGeometry(startX, startY + 4 * spacingY, widthLab, height);
+
+        entranceBox->setGeometry(startX + spacingX, startY, width, height);
+        callListBox->setGeometry(startX + spacingX, startY + spacingY, width, height);
+        floorDestinBox->setGeometry(startX + spacingX, startY + 4 * spacingY, width, height);
+        directionBox->setGeometry(startX + spacingX, startY + 2 * spacingY, width, height);
+
+        countPassengersEdt->setGeometry(startX + spacingX, startY + 3 * spacingY, width, height);
     }
 
-    directionBox = new QComboBox(this);
-    directionBox->setGeometry(startX + spacingX, startY + 2 * spacingY, width, height);
+    for (int i = 0; i < entrances; ++i) {
+        entranceBox->addItem(QString::number(i + 1));
+    }
+
+    for (int i = 0; i < floors; ++i) {
+        callListBox->addItem(QString::number(i + 1));
+        floorDestinBox->addItem(QString::number(i + 1));
+    }
+
     directionBox->addItem("Up");
     directionBox->addItem("Down");
-
-    entranceBox = new QComboBox(this);
-    for (int j = 0; j < entrances; ++j) {
-        entranceBox->addItem(QString::number(j + 1));
-    }
-    entranceBox->setGeometry(startX + spacingX, startY, width, height);
-
-    countPassengersEdt = new QLineEdit(this);
-    countPassengersEdt->setGeometry(startX + spacingX, startY + 3 * spacingY, width, height);
-
-    connect(entranceBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onEntranceBoxChanged);
-    connect(callListBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onCallListBoxChanged);
-    connect(floorDestinBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onFloorDestinBoxChanged);
-    connect(directionBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TManager::onDirectionBoxChanged);
 }
 
-TManager::~TManager()
+QPushButton* TManager::getStartButton() const
 {
+    return startButton;
 }
 
-void TManager::closeEvent(QCloseEvent *event)
+QPushButton* TManager::getCallButton() const
 {
-    emit closed();
-    QWidget::closeEvent(event);
+    return callButton;
 }
+
 void TManager::setNewParam(int e, int f)
 {
+    for (int i = 0; i < entrances; ++i) {
+        entranceBox->removeItem(i);
+    }
+
+    for (int i = 0; i < floors; ++i) {
+        callListBox->removeItem(i);
+        floorDestinBox->removeItem(i);
+    }
+
+    directionBox->removeItem(0);
+    directionBox->removeItem(1);
+
     entrances = e;
     floors = f;
     showMenu();
     showButtons();
 }
 
-void TManager::makePassenger()
+void TManager::resetPressedNumbers()
 {
-    emit passengerIsMade();
+    pressedNumbers.clear();
+}
+
+std::vector<int> TManager::getPressedNumbers()
+{
+    return pressedNumbers;
+}
+
+int TManager::getActiveEntrance()
+{
+    return activeEntrance;
 }
 
 int TManager::getPassengerEntrance()
 {
-    return entrance;
+    return passengerEntrance;
 }
 
 int TManager::getPassengerCurFloor()
 {
-    return currFloor;
+    return  passengerCurrFloor;
 }
 
-int TManager::getPassengerDestFloor()
+void TManager::onStartButtonPressed(int number)
 {
-    return destFloor;
+    if (std::find(pressedNumbers.begin(), pressedNumbers.end(), number) == pressedNumbers.end()) {
+        pressedNumbers.push_back(number);
+    }
 }
 
-int TManager::getDirection()
+void TManager::onResetButtons()
 {
-    return direction;
+    for (TLiftButton *button : buttons) {
+        button->resetButton();
+    }
 }
 
-int TManager::getPassengerCount()
+void TManager::onMakePassenger()
 {
-    return countPassengersEdt->text().toInt();
+    emit passengerIsMade(passengerEntrance, passengerCurrFloor, passengerDestFloor, countPassengersEdt->text().toInt(), passengerDirection);
 }
 
 void TManager::onCallListBoxChanged(int index)
 {
-    currFloor = index;
+    passengerCurrFloor = index;
 }
 
 void TManager::onFloorDestinBoxChanged(int index)
 {
-    destFloor = index;
+    passengerDestFloor = index;
 }
 
 void TManager::onEntranceBoxChanged(int index)
 {
-    entrance = index;
+    passengerEntrance = index;
 }
 
 void TManager::onDirectionBoxChanged(int index)
 {
-    direction = index - 1;
+    passengerDirection = index - 1;
 }

@@ -15,12 +15,13 @@ TInterface::TInterface(THouse *h, QWidget *parent)
     setFixedSize(stateSizeX + 430, stateSizeY);
 
     stateWidget = new TState(entrances, floors, this);
-    paramWidget = new TParam(this);
     managerWidget = new TManager(entrances, floors, this);
+    paramWidget = new TParam(this);
 
     stateWidget->setFixedSize(stateSizeX, stateSizeY);
-    paramWidget->setFixedSize(200, stateSizeY);
-    managerWidget->setFixedSize(430, stateSizeY);
+    managerWidget->setFixedSize(stateSizeX + 100, stateSizeY);
+    paramWidget->setFixedSize(200, 150);
+
 
     connect(managerWidget->getStartButton(), &QPushButton::clicked, this, &TInterface::onStartLift);
     connect(managerWidget->getCallButton(), &QPushButton::clicked, this, &TInterface::onCallLift);
@@ -45,19 +46,14 @@ void TInterface::closeEvent(QCloseEvent *event)
 void TInterface::resizeEvent(QResizeEvent *event)
 {
     stateWidget->move(5, 5);
-    paramWidget->move(stateSizeX + 170, 25);
     managerWidget->move(stateSizeX + 10, 5);
+    paramWidget->move(stateSizeX + 170, 25);
 
     QWidget::resizeEvent(event);
 }
 
-void TInterface::onPassengerIsMade()
+void TInterface::onPassengerIsMade(int entrance, int destination, int floor, int count, int direction)
 {
-    int entrance = managerWidget->getPassengerEntrance();
-    int destination =  managerWidget->getPassengerDestFloor();
-    int floor = managerWidget->getPassengerCurFloor();
-    int count = managerWidget->getPassengerCount();
-    int direction = managerWidget->getDirection();
     stateWidget->showPassenger(entrance, destination, floor, count);
     house->setPassenger(entrance, floor, destination, count);
     house->setDirection(entrance, direction);
@@ -111,11 +107,12 @@ void TInterface::onSetParam()
     stateSizeX = 150 * (entrances) +10;
     stateSizeY = 50 * (floors + 1) + 20 ;
 
-    setFixedSize(stateSizeX + 600, stateSizeY);
+    setFixedSize(stateSizeX + 430, stateSizeY);
+
     stateWidget->setFixedSize(stateSizeX, stateSizeY);
-    paramWidget->setFixedSize(200, stateSizeY);
-    managerWidget->setFixedSize(200, stateSizeY);
     stateWidget->setNewParam(e, f);
+
+    managerWidget->setFixedSize(stateSizeX + 100, stateSizeY);
     managerWidget->setNewParam(e, f);
 }
 
